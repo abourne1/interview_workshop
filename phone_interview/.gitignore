@@ -1,0 +1,7 @@
+*.pyc
+*.pyo
+config.py
+app.db
+search.db
+flask
+
