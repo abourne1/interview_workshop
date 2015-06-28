@@ -4,18 +4,27 @@
 {% block content %}
     <h1>Add A Question</h1>
     <form action="/new" method="post" name="make_question">
-        Question: <input type="text" name="question"><br>
-        Hint: <input type="text" name="hint"><br>
         Who are you? <input type="text" name="author"><br>
-        Difficulty: <input type="text" name="difficulty"><br>
+        Difficulty:
+        <select name="difficulty">
+            <option value=1>{{difficulties[1]}} - easy</option>
+            {% for i in range(2,5) %}
+                <option value=i>{{difficulties[i]}}</option>
+            {% endfor %}
+            <option value=5>{{difficulties[5]}} - hard</option>
+        </select>
+        <br>
         Topic:
-        <select name="topics">
+        <select name="topic_id">
         {% for topic in topics %}
             <option value=topic.id>
                 {{ topic.name }}
             </option>
         {% endfor %}
         </select><br>
+        <br>
+        Question:<br><textarea type="tet" name="question"></textarea>
+        <br>Hint:<br><textarea type="text" name="hint"></textarea><br>
         <input type="submit" value="Submit">
     </form>
 {% endblock %}
