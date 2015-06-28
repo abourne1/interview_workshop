@@ -1,6 +1,5 @@
 import datetime
 from app import db
-from sqlalchemy.dialects.postgresql import JSON
 
 class Question(db.Model):
     __tablename__ = 'questions'
@@ -8,10 +7,11 @@ class Question(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     author = db.Column(db.String(64))
     topic_id = db.Column(db.Integer, db.ForeignKey('topics.id'))
-    text = db.Column(JSON)
-    hint = db.Column(JSON)
+    text = db.Column(db.Text(2000))
+    hint = db.Column(db.Text(2000))
     difficulty = db.Column(db.Integer)
     timestamp = db.Column(db.DateTime)
+    next_question = db.Column(db.Integer, db.ForeignKey('questions.id'))
 
     def __init__(self, text, hint, topic_id, author, difficulty):
         self.author = author

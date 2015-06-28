@@ -2,13 +2,20 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Submit A Question</h1>
-    <form action="" method="post" name="make_question">
-        <p>
-            <input type="text" name="question">
-        </p>
-        <p>
-            <input type="submit" value="submit question">
-        </p>
+    <h1>Add A Question</h1>
+    <form action="/new" method="post" name="make_question">
+        Question: <input type="text" name="question"><br>
+        Hint: <input type="text" name="hint"><br>
+        Who are you? <input type="text" name="author"><br>
+        Difficulty: <input type="text" name="difficulty"><br>
+        Topic:
+        <select name="topics">
+        {% for topic in topics %}
+            <option value=topic.id>
+                {{ topic.name }}
+            </option>
+        {% endfor %}
+        </select><br>
+        <input type="submit" value="Submit">
     </form>
 {% endblock %}
