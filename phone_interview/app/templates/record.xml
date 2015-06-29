@@ -4,12 +4,13 @@
         {{question.text}}
     </Say>
     <Record action="/handle_recording" finishOnKey="*">
-        <Gather action="/control_question? numDigits="1" finishOnKey="*">
+        <Gather action="/control_question" numDigits="1" finishOnKey="*">
             <Say>
                 Press 1 to repeat the question.
                 Press 2 to receive a hint.
                 Press 3 to hear the answer.
-                Press 4 to skip this question
+                Press 4 to upvote this question.
+                Press 5 to skip this question.
             </Say>
         </Gather>
     </Record>

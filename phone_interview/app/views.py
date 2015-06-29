@@ -67,14 +67,25 @@ def query():
         # randomize later if necessary
     else:
         question = db.session.query(Question).filter(
-            Question.topic_id).name == digit_pressed
+            Question.topic_id == digit_pressed
         ).order_by(Question.popularity.desc())[0]
     # combine many recordings together somehow?
-    render_template('record.xml', question = question)
+    render_template('record.xml', question=question)
 
 @app.route('/control_question', methods=['POST'])
 def control_quesition():
     digit_pressed = request.values.get('Digits', None)
+    question = db.session.query(Question).get(request.question)
+    if digit_pressed == "1":
+        pass
+    else:
+        pass
+
+@app.route('/handle_recording', methods=['POST'])
+def handle_recording():
+    pass
+
+
 
 
 
