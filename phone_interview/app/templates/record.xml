@@ -1,21 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Response>
     <Say>
-        Please describe the tye of question you want to receive.
-        For example, saying 'easy algorithms' will generate an
-        easy algorithm question for you to answer. Possible topics include:
-        {% for topic in topics %}
-            {{ topic.name + " " }}
-        {% endfor %}
-        Possible difficulties include easy, medium and hard.
-        Press pound when done speaking.
+        {{question.text}}
     </Say>
-    <Record
-        transcribe="true"
-        transcribeCallback="/query"
-        method="GET"
-        maxLength="20"
-        finishOnKey="*"
-        />
+    <Record action="/handle_recording" finishOnKey="*">
+        <Gather action="/control_question? numDigits="1" finishOnKey="*">
+            <Say>
+                Press 1 to repeat the question.
+                Press 2 to receive a hint.
+                Press 3 to hear the answer.
+                Press 4 to skip this question
+            </Say>
+        </Gather>
+    </Record>
     <Say>I did not receive a recording</Say>
 </Response>

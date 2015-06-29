@@ -4,6 +4,13 @@ from flaskext.mail import Message
 from sqlalchemy import desc
 from app import app, db, mail
 
+"""
+put a button on the website you can click, and recieve a phone call
+https://www.twilio.com/docs/howto/walkthrough/click-to-call/php/laravel#0
+
+Could make the home page one big phone button
+"""
+
 @app.route('/')
 def index():
     return render_template(
@@ -21,10 +28,10 @@ def index():
 
 @app.route('/new', methods=['POST'])
 def new():
+    # add validations, probably through a form class
     new_question = Question(
         author=request.form['author'],
         topic_id=request.form['topic_id'],
-        difficulty=request.form['difficulty'],
         text=request.form['question'],
         hint=request.form['hint'],
         answer=request.form['answer']
@@ -44,54 +51,30 @@ def new():
     mail.send(msg)
     return redirect(url_for('index'))
 
-@app.route('/call', methods=['POST'])
-def call():
-    render_template(
-        'record.xml',
-        topics=db.session.query(Topic).all()
-    )
-
-@app.route('/query', methods=['POST'])
-def query():
+@app.route('/choose_topic', methods=['POST'])
+def choose_topic():
     resp = twilio.twiml.Response()
-    question = request.form['question']
-    if question:
-        digit_pressed = request.values.get('Digits', None)
-        if digit_pressed == "1":
-            resp.say(question.text)
-        elif digit_pressed == "2":
-            resp.say(question.hint)
-        elif digit_pressed == "3":
-            questions = request.form['questions']
-            question = questions[0]
-            questions = questions[1:]
-        elif digit_pressed == "4":
-            resp.say(question.answer)
+    with resp.gather(numDigits=1, action="/choose_question", method="POST") as g:
+        g.say("Press 0 for any topic")
+        for i, topic in enumerate( db.session.query(Topic).all() ):
+            g.say("Press {} for {} questions".format(i, topic.name))
 
+@app.route('/choose_question', methods=['POST'])
+def query():
+    digit_pressed = request.values.get('Digits', None)
+    if digit_pressed == 0:
+        question = db.session.query(Question).order_by(Question.popularity).desc()[0]
+        # randomize later if necessary
     else:
-        text = request.form['TranscriptionText']
-        difficulties = {"easy":[1,2], "medium":[2,3,4], "hard":[4,5]
-        chosen_diffs = set(difficulties.keys()).intersection(text)
-        diff_ints = set(sum([difficulties[diff] for diff in chosen_diffs], []))
-        topics = [topic.name for topic in db.session.query(Topic).all()]
-        chosen_topics = set(topics).intersection(text)
+        question = db.session.query(Question).filter(
+            Question.topic_id).name == digit_pressed
+        ).order_by(Question.popularity.desc())[0]
+    # combine many recordings together somehow?
+    render_template('record.xml', question = question)
 
-        questions = db.session.query(Question).filter(
-            db.session.query(Topic).get(Question.topic_id).name in chosen_topics,
-            Question.difficulty in diff_ints
-        ).order_by(Question.popularity.desc())
-        question = questions[0]
-        
-    # pass questions[1:] to next url call
-    with resp.gather(numDigits=1, action="/query", method="POST") as g:
-        g.say(q.question)
-        g.say(
-            "Press 1 to repeat the question.\
-            Press 2 for a hint. \
-            Press 3 to skip question \
-            Press 4 to hear answer"
-            )
-
+@app.route('/control_question', methods=['POST'])
+def control_quesition():
+    digit_pressed = request.values.get('Digits', None)
 
 
 
