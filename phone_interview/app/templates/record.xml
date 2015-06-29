@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Response>
+    <Say>
+        Please describe the tye of question you want to receive.
+        For example, saying 'easy algorithms' will generate an
+        easy algorithm question for you to answer. Possible topics include:
+        {% for topic in topics %}
+            {{ topic.name + " " }}
+        {% endfor %}
+        Possible difficulties include easy, medium and hard.
+        Press pound when done speaking.
+    </Say>
+    <Record
+        transcribe="true"
+        transcribeCallback="/query"
+        method="GET"
+        maxLength="20"
+        finishOnKey="*"
+        />
+    <Say>I did not receive a recording</Say>
+</Response>

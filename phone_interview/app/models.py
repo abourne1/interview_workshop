@@ -11,6 +11,8 @@ class Question(db.Model):
     hint = db.Column(db.Text(2000))
     difficulty = db.Column(db.Integer)
     timestamp = db.Column(db.DateTime)
+    popularity = db.Column(db.Integer)
+    answer = db.Column(db.Text(2000))
     next_question = db.Column(db.Integer, db.ForeignKey('questions.id'))
 
     def __init__(self, text, hint, topic_id, author, difficulty):
