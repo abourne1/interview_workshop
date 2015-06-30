@@ -36,3 +36,17 @@ class Topic(db.Model):
     def __repr__(self):
         return '<id {}>'.format(self.id)
 
+class Recording(db.Model):
+    __tablename__ = 'recordings'
+
+    id = db.Column(db.Integer, primary_key=True)
+    url = db.Column(db.String(200))
+    call_sid = db.Column(db.String(300))
+    sent = db.Column(db.Boolean)
+
+    def __init__(self, url):
+        self.url = url
+
+    def __repr__(self):
+        return '<id {}>'.format(self.id)
+

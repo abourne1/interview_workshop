@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Response>
-    <Say>
-        {{question.text}}
-    </Say>
     <Record action="/handle_recording" finishOnKey="*">
-        <Gather action="/control_question" numDigits="1" finishOnKey="*">
+        <Say>
+            {{question.text}}
+        </Say>
+        <Gather action={{action_url} numDigits="1" finishOnKey="*">
             <Say>
                 Press 1 to repeat the question.
                 Press 2 to receive a hint.
                 Press 3 to hear the answer.
                 Press 4 to upvote this question.
-                Press 5 to skip this question.
+                press 5 to hang up and receive a recording of this phone call.
             </Say>
         </Gather>
     </Record>

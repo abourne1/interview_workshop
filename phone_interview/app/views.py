@@ -1,8 +1,11 @@
 from flask import render_template, redirect, url_for, request, flash
-from .models import Topic, Question
+from .models import Topic, Question, Recording
 from flaskext.mail import Message
-from sqlalchemy import desc
+from sqlalchemy import desc, func
 from app import app, db, mail
+import random
+import twilio
+import urllib2
 
 """
 put a button on the website you can click, and recieve a phone call
@@ -12,7 +15,14 @@ Could make the home page one big phone button
 """
 
 @app.route('/')
-def index():
+def homepage():
+    render_template(
+        'homepage',
+        topics=db.session.query(Topic).all()
+    )
+
+@app.route('/make_question')
+def make_question():
     return render_template(
         'index.html',
         topics=db.session.query(Topic).all(),
@@ -62,28 +72,72 @@ def choose_topic():
 @app.route('/choose_question', methods=['POST'])
 def query():
     digit_pressed = request.values.get('Digits', None)
+    num_questions = db.session.query(func.count(Question.id))
+    index = int(random.random()**2 * num_questions)
     if digit_pressed == 0:
-        question = db.session.query(Question).order_by(Question.popularity).desc()[0]
+        question = db.session.query(Question).order_by(Question.popularity).desc()[index]
         # randomize later if necessary
     else:
         question = db.session.query(Question).filter(
             Question.topic_id == digit_pressed
-        ).order_by(Question.popularity.desc())[0]
+        ).order_by(Question.popularity.desc())[index]
+
     # combine many recordings together somehow?
-    render_template('record.xml', question=question)
+    action_url = "/control_question?question={}".format(question.id)
+    render_template('record.xml', url=action_url)
 
 @app.route('/control_question', methods=['POST'])
 def control_quesition():
-    digit_pressed = request.values.get('Digits', None)
     question = db.session.query(Question).get(request.question)
+    resp = twilio.twiml.Response()
+    digit_pressed = request.values.get('Digits', None)
+    call_sid = request.CallSid
     if digit_pressed == "1":
-        pass
-    else:
-        pass
+        resp.say(question.text)
+    elif digit_pressed == "2":
+        resp.say(question.hint)
+    elif digit_pressed == "3":
+        resp.say(question.answer)
+    elif digit_pressed == "4":
+        question.popularity += 1
+        db.session.commit()
+    elif digit_pressed == "5":
+        r = get_recording(call_sid)
+        # send recording to users email?
+        client.calls.get(call_sid).hangup()
+
+    action_url = "/control_question?question={}".format(question.id)
+    render_template('record.xml', url=action_url)
 
 @app.route('/handle_recording', methods=['POST'])
 def handle_recording():
-    pass
+    recording_url = request.RecordingUrl
+    call_sid = request.CallSid
+
+    new_recording = Recording(
+        url=recording_url,
+        call_sid=call_sid
+    )
+    db.session.add(new_recording)
+    db.session.commit()
+
+def get_recording(call_sid):
+    recordings = db.session.query(Recording).with_attributes(
+        Recording.url
+    ).filter(
+        Recording.call_sid == call_sid,
+        Recording.sent == False
+    )
+    audio_recording = None
+    for r in recordings:
+        # figure out how to combine these recordings when I fix the code that gets here
+        r.sent = True
+        req = urllib2.Request(r.url)
+
+    db.session.commit()
+
+
+
 
 
 
