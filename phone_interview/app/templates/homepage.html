@@ -2,33 +2,40 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <script>
-    function display() {
-      document.getElementById("menu").style.display='block;'
-    }
-    </script>
-
-
     <form class="call" action='/choose_question'>
       Topic:
       <select name="topic_id">
         <option value=0>Any</option>
         {% for topic in topics %}
-            <option value=topic.id>
-                {{ topic.name }}
-            </option>
+            <option value={{topic.id}}>{{ topic.name }}</option>
         {% endfor %}
-        </select>
+      </select>
       Phone Num:
       <input type="tel" name="number">
-      <input type="submit" value="Call" onclick="">
-      <div id="menu" style="display: none;">
-        Hi
-      </div>
+      <input type="submit" value="Call" onclick="display();">
     </form>
+
+    <div id="menu" style="display: none;">
+        Hi
+    </div>
+
 <!-- use an onclick action to hang up the call when the user presses
     the button -->
-    <button class="hangup" onclick="hangup();">
-        Hangup
-    </button>
+    {% if is_current %}
+        <button class="hangup">
+            Hangup
+        </button>
+        <button class="upvote">
+            UpVote
+        </button>
+        <button class="Repeat">
+            Repeat
+        </button>
+        <button class="Hint">
+            Hint
+        </button>
+        <button class="Repeat">
+            Answer
+        </button>
+    {% endif %}
 {% endblock %}

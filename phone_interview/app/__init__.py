@@ -9,6 +9,7 @@ app = Flask(__name__)
 app.config.from_pyfile("../config.py")
 db = SQLAlchemy(app)
 mail = Mail(app)
+logger = app.logger
 
 import logging
 

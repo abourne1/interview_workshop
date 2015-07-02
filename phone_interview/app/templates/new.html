@@ -3,7 +3,7 @@
 
 {% block content %}
     <h1>Add A Question</h1>
-    <form action="/new" method="post" name="make_question">
+    <form action="/make" method="post" name="make_question">
         Who are you? <input type="text" name="author"><br>
         Difficulty:
         <select name="difficulty">
@@ -17,13 +17,13 @@
         Topic:
         <select name="topic_id">
         {% for topic in topics %}
-            <option value=topic.id>
+            <option value={{topic.id}}>
                 {{ topic.name }}
             </option>
         {% endfor %}
         </select><br>
         <br>
-        Question:<br><textarea type="text" name="question"></textarea>
+        Question:<br><textarea type="text" name="question"></textarea><br>
         Hint:<br><textarea type="text" name="hint"></textarea><br>
         Answer:<br><textarea type="text" name="answer"></textarea><br>
         <input type="submit" value="Submit">
