@@ -1,11 +1,14 @@
-from flask import render_template, redirect, url_for, request, flash
+import logging
+import random
+import urllib2
+from flask import Flask, render_template, redirect, url_for, request, flash
 from .models import Topic, Question, Recording
-from flaskext.mail import Message
+from flask.ext.mail import Message, Mail
 from sqlalchemy import desc, func
 from app import app, db, mail
-import random
-import twilio
-import urllib2
+from twilio.util import TwilioCapability
+from twilio.rest import TwilioRestClient
+
 
 """
 put a button on the website you can click, and recieve a phone call
@@ -16,15 +19,21 @@ Could make the home page one big phone button
 
 @app.route('/')
 def homepage():
-    render_template(
-        'homepage',
-        topics=db.session.query(Topic).all()
+    application_sid = "AP6053400b8f663ea7ba9bbcbb41da1ae3"
+    capability = TwilioCapability(app.config['ACCOUNT_SID'], app.config['AUTH_TOKEN'])
+    capability.allow_client_outgoing(application_sid)
+    token = capability.generate()
+
+    return render_template(
+        'homepage.html',
+        topics=db.session.query(Topic).all(),
+        token=token
     )
 
 @app.route('/make_question')
 def make_question():
     return render_template(
-        'index.html',
+        'new.html',
         topics=db.session.query(Topic).all(),
         questions=db.session.query(Question).all(),
         difficulties={
@@ -61,30 +70,29 @@ def new():
     mail.send(msg)
     return redirect(url_for('index'))
 
-@app.route('/choose_topic', methods=['POST'])
-def choose_topic():
-    resp = twilio.twiml.Response()
-    with resp.gather(numDigits=1, action="/choose_question", method="POST") as g:
-        g.say("Press 0 for any topic")
-        for i, topic in enumerate( db.session.query(Topic).all() ):
-            g.say("Press {} for {} questions".format(i, topic.name))
-
-@app.route('/choose_question', methods=['POST'])
+@app.route('/choose_question', methods=['GET'])
 def query():
-    digit_pressed = request.values.get('Digits', None)
-    num_questions = db.session.query(func.count(Question.id))
+    client = TwilioRestClient(app.config['ACCOUNT_SID'], app.config['AUTH_TOKEN'])
+    num_questions = db.session.query(func.count(Question.id)).count()
     index = int(random.random()**2 * num_questions)
-    if digit_pressed == 0:
+    topic_id = request.form['topic_id']
+    if topic_id == 0:
         question = db.session.query(Question).order_by(Question.popularity).desc()[index]
-        # randomize later if necessary
     else:
         question = db.session.query(Question).filter(
-            Question.topic_id == digit_pressed
+            Question.topic_id == topic_id
         ).order_by(Question.popularity.desc())[index]
 
     # combine many recordings together somehow?
-    action_url = "/control_question?question={}".format(question.id)
-    render_template('record.xml', url=action_url)
+    app.logger.debug(question)
+    action_url = "record.xml?question={}".format(question.id)
+    client.calls.create(
+        to=request.form['number'],
+        from_=app.config['TWILIO_NUMBER'],
+        url=action_url
+    )
+    return redirect(url_for('homepage'))
+
 
 @app.route('/control_question', methods=['POST'])
 def control_quesition():

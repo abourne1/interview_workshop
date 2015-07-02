@@ -1,4 +1,34 @@
 <!-- extend base layout -->
 {% extends "base.html" %}
 
+{% block content %}
+    <script>
+    function display() {
+      document.getElementById("menu").style.display='block;'
+    }
+    </script>
+
+
+    <form class="call" action='/choose_question'>
+      Topic:
+      <select name="topic_id">
+        <option value=0>Any</option>
+        {% for topic in topics %}
+            <option value=topic.id>
+                {{ topic.name }}
+            </option>
+        {% endfor %}
+        </select>
+      Phone Num:
+      <input type="tel" name="number">
+      <input type="submit" value="Call" onclick="">
+      <div id="menu" style="display: none;">
+        Hi
+      </div>
+    </form>
+<!-- use an onclick action to hang up the call when the user presses
+    the button -->
+    <button class="hangup" onclick="hangup();">
+        Hangup
+    </button>
 {% endblock %}
