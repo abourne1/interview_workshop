@@ -44,6 +44,7 @@ class Recording(db.Model):
     url = db.Column(db.String(200))
     call_sid = db.Column(db.String(300))
     sent = db.Column(db.Boolean)
+    question_id = db.Column(db.Integer, db.ForeignKey('questions.id'))
 
     def __init__(self, url):
         self.url = url
