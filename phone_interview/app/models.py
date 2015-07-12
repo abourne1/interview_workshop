@@ -46,8 +46,10 @@ class Recording(db.Model):
     sent = db.Column(db.Boolean)
     question_id = db.Column(db.Integer, db.ForeignKey('questions.id'))
 
-    def __init__(self, url):
-        self.url = url
+    def __init__(self, call_sid, question_id):
+        self.call_sid = call_sid
+        self.question_id = question_id
+
 
     def __repr__(self):
         return '<id {}>'.format(self.id)

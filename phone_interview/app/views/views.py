@@ -1,6 +1,7 @@
 import logging
 import random
 import urllib2
+import twilio.twiml
 from flask import Flask, render_template, redirect, url_for, request, flash
 from app.models import Topic, Question, Recording
 from flask.ext.mail import Message, Mail
@@ -39,44 +40,65 @@ def homepage():
 @app.route('/choose_question', methods=['GET', 'POST'])
 def choose_question():
     client = TwilioRestClient(app.config['ACCOUNT_SID'], app.config['AUTH_TOKEN'])
-    num_questions = db.session.query(Question).count()
-    logger.debug(num_questions)
-    index = int(random.random()**2 * num_questions)
-    logger.debug(index)
+    
     topic_id = request.args.get('topic_id', '')
     phone_number = request.args.get('number', '')
     if topic_id == "0":
-        question = db.session.query(Question).order_by(Question.popularity.desc()).all()[index]
+        matches = db.session.query(Question).order_by(Question.popularity.desc())
+        index = int(random.random()**2 * matches.count() )
+        question = matches.all()[index]
     else:
-        question = db.session.query(Question).filter(
+        matches = db.session.query(Question).filter(
             Question.topic_id == topic_id
-        ).order_by(Question.popularity.desc()).all()[index]
+        ).order_by(Question.popularity.desc())
+        index = int(random.random()**2 * matches.count() )
+        question = matches.all()[index]
 
-    # combine many recordings together somehow?
-    app.logger.debug(question)
-    action_url = "https://74d005c5.ngrok.io/call_again.xml?question={}".format(question.id)
-    client.calls.create(
+    # call my number, then have that number dial the users number
+    url = "http://5f296970.ngrok.io/handle_call?question_id={}".format(question.id)
+    call = client.calls.create(
         to=phone_number,
         from_=app.config['TWILIO_NUMBER_1'],
-        url=action_url
+        url=url
     )
+
     return render_template(
         'homepage.html',
         topics=db.session.query(Topic).all(),
-        is_current=True
+        is_current=True,
+        call_sid=call.sid,
+        question_id=question.id
     )
 
 @app.route('/handle_call', methods=['GET', 'POST'])
 def handle_call():
-    dial_call_sid = request.args.get('DialCallSid', '')
-    rec = db.session.query(Recording).filter(Recording.call_sid == dial_call_sid).first()
-    question = db.session.query(Question).get(rec.question_id)
+    action = request.args.get('action', '')
+    question_id = request.args.get('question_id', '')
+    logger.debug(question_id)
+    question = db.session.query(Question).get(question_id)
     resp = twilio.twiml.Response()
+
+    # record, say, and stay on the line. Allow the user to interact w/
+    # the call using buttons on the webpage
+    if action == "repeat":
+        resp.say(question.text)
+    elif action == "hint":
+        resp.say(question.hint)
+    else:
+        resp.say(question.text)
+        logger.debug(question.text)
+
+    # pause for 5 min before hanging up
+    resp.pause(length=60 * 5)
+    return str(resp)
 
 
 @app.route('/repeat', methods=['GET', 'POST'])
 def repeat():
-    pass
+    sid = request.args.get('call_sid', '')
+    question_id = request.args.get('question_id', '')
+    url = "http://5f296970.ngrok.io/handle_call?question_id={}&action=repeat".format(question_id)
+    call = client.calls.update(sid, url, "POST")
 
 @app.route('/hint', methods=['GET', 'POST'])
 def hint():
