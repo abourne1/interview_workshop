@@ -26,19 +26,14 @@ performs those actions.
 
 @app.route('/')
 def homepage():
-    application_sid = "AP6053400b8f663ea7ba9bbcbb41da1ae3"
-    capability = TwilioCapability(app.config['ACCOUNT_SID'], app.config['AUTH_TOKEN'])
-    capability.allow_client_outgoing(application_sid)
-
     return render_template(
         'homepage.html',
-        topics=db.session.query(Topic).all(),
-        is_current=False
+        topics=db.session.query(Topic).all()
     )
-
 
 @app.route('/choose_question', methods=['GET', 'POST'])
 def choose_question():
+    logger.debug(request.args)
     client = TwilioRestClient(app.config['ACCOUNT_SID'], app.config['AUTH_TOKEN'])
     
     topic_id = request.args.get('topic_id', '')
@@ -55,7 +50,7 @@ def choose_question():
         question = matches.all()[index]
 
     # call my number, then have that number dial the users number
-    url = "http://5f296970.ngrok.io/handle_call?question_id={}".format(question.id)
+    url = "{}/handle_call?question_id={}".format(app.config['NGROK_ROUTE'], question.id)
     call = client.calls.create(
         to=phone_number,
         from_=app.config['TWILIO_NUMBER_1'],
@@ -72,8 +67,10 @@ def choose_question():
 
 @app.route('/handle_call', methods=['GET', 'POST'])
 def handle_call():
+    logger.debug(request.args)
     action = request.args.get('action', '')
     question_id = request.args.get('question_id', '')
+    call_sid = request.args.get('call_sid', '')
     logger.debug(question_id)
     question = db.session.query(Question).get(question_id)
     resp = twilio.twiml.Response()
@@ -90,23 +87,46 @@ def handle_call():
 
     # pause for 5 min before hanging up
     resp.pause(length=60 * 5)
-    return str(resp)
-
+    #return str(resp)
+    return render_template(
+        'homepage.html',
+        topics=db.session.query(Topic).all(),
+        is_current=True,
+        call_sid=call_sid,
+        question_id=question.id
+    )
 
 @app.route('/repeat', methods=['GET', 'POST'])
 def repeat():
+    send_action("repeat")
+
+@app.route('/hint', methods=['GET', 'POST'])
+def hint():
     sid = request.args.get('call_sid', '')
     question_id = request.args.get('question_id', '')
     url = "http://5f296970.ngrok.io/handle_call?question_id={}&action=repeat".format(question_id)
     call = client.calls.update(sid, url, "POST")
 
-@app.route('/hint', methods=['GET', 'POST'])
-def hint():
-    pass
-
 @app.route('/answer', methods=['GET', 'POST'])
 def answer():
     pass
+
+def send_action(action):
+    client = TwilioRestClient(app.config['ACCOUNT_SID'], app.config['AUTH_TOKEN'])
+    sid = request.args.get('call_sid', '')
+    question_id = request.args.get('question_id', '')
+    url = "{}/handle_call?question_id={}&action={}".format(app.config['NGROK_ROUTE'], question_id, action)
+    # these args aren't coming in!!! 
+    logger.debug(sid)
+    logger.debug(url)
+    call = client.calls.update(sid, url=url, method="POST")
+    return render_template(
+        'homepage.html',
+        topics=db.session.query(Topic).all(),
+        is_current=True,
+        call_sid=call.sid,
+        question_id=question_id
+    )
 
 
 

@@ -24,20 +24,21 @@
 
 <!-- change these to input parameters -->
     {% if is_current %}
-        <button class="hangup">
-            Hangup
-        </button>
-        <button class="upvote">
-            UpVote
-        </button>
-        <button class="Repeat">
-            Repeat
-        </button>
-        <button class="Hint">
-            Hint
-        </button>
-        <button class="Repeat">
-            Answer
-        </button>
+        <form class="hangup" action="/hangup">
+            <input type="hidden" name="call_sid" value="{{call_sid}}">
+            <input type="hidden" name="question_id" value="{{question_id}}">
+            <input type="submit" value="Hangup">
+        </form>
+        <form class="upvote" action="/upvote">
+            <input type="submit" value="Upvote">
+        </form>
+        <form class="Repeat" action="/repeat">
+            <input type="hidden" name="call_sid" value="{{call_sid}}">
+            <input type="hidden" name="question_id" value="{{question_id}}">
+            <input type="submit" value="Repeat">
+        </form>
+        <form class="Hint" action="/hint">
+            <input type="submit" value="Hint">
+        </form>
     {% endif %}
 {% endblock %}
