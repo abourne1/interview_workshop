@@ -38,18 +38,7 @@ def homepage():
 def choose_question():
     topic_id = request.args.get('topic_id', '')
     phone_number = request.args.get('number', '')
-    if topic_id == "0":
-        matches = db.session.query(Question).order_by(Question.popularity.desc())
-        index = int(random.random()**2 * matches.count() )
-        question = matches.all()[index]
-    else:
-        matches = db.session.query(Question).filter(
-            Question.topic_id == topic_id
-        ).order_by(Question.popularity.desc())
-        index = int(random.random()**2 * matches.count() )
-        question = matches.all()[index]
-
-    # call my number, then have that number dial the users number
+    question = choose_question(topic_id)
     url = "{}/handle_call?question_id={}&action=speak".format(app.config['NGROK_ROUTE'], question.id)
     call = client.calls.create(
         to=phone_number,
@@ -64,6 +53,19 @@ def choose_question():
         call_sid=call.sid,
         question_id=question.id
     )
+
+def choose_question(topic_id):
+    if topic_id == "0":
+        matches = db.session.query(Question).order_by(Question.popularity.desc())
+        index = int(random.random()**2 * matches.count() )
+        question = matches.all()[index]
+    else:
+        matches = db.session.query(Question).filter(
+            Question.topic_id == topic_id
+        ).order_by(Question.popularity.desc())
+        index = int(random.random()**2 * matches.count() )
+        question = matches.all()[index]
+    return question
 
 @app.route('/handle_call', methods=['GET', 'POST'])
 def handle_call():
@@ -81,6 +83,8 @@ def handle_call():
         resp.say(question.text)
     elif action == "hint":
         resp.say(question.hint)
+    elif action == "answer":
+        resp.say(question.answer)
     else:
         resp.say(question.text)
         logger.debug(question.text)
@@ -89,10 +93,24 @@ def handle_call():
     resp.pause(length=60 * 5)
     return str(resp)
 
+@app.route('/next-question', methods=['GET', 'POST'])
+def next_question():
+    sid = request.args.get('call_sid', '')
+    topic_id = request.args.get('topic_id', '')
+    question = choose_question(topic_id)
+    update_call(sid, question.id)
+    return render_template(
+        'homepage.html',
+        topics=db.session.query(Topic).all(),
+        is_current=True,
+        call_sid=sid,
+        question_id=question.id
+    )
+
+
 @app.route('/upvote', methods=['GET', 'POST'])
 def upvote():
-    question_id = request.args.get('question_id', '')
-    sid = request.args.get('call_sid', '')
+    sid, question_id = get_sid_and_question_id()
 
     question = db.session.query(Question).get(question_id)
     if question.popularity:
@@ -144,12 +162,22 @@ def answer():
         question_id=question_id
     )
 
+@app.route('/hangup', methods=['GET', 'POST'])
+def hangup():
+    sid = request.args.get('call_sid', '')
+    call = client.calls.update(sid, status="completed")
+    return render_template(
+        'homepage.html',
+        topics=db.session.query(Topic).all(),
+        is_current=False
+    )
+
 def get_sid_and_question_id():
     sid = request.args.get('call_sid', '')
     question_id = request.args.get('question_id', '')
     return sid, question_id
 
-def update_call(sid, question_id, action):
+def update_call(sid, question_id, action=""):
     url = "{}/handle_call?question_id={}&action={}".format(app.config['NGROK_ROUTE'], question_id, action)
     call = client.calls.update(sid, url=url, method="POST")
 

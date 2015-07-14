@@ -2,27 +2,6 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <form class="call" action='/choose_question'>
-      Topic:
-      <select name="topic_id">
-        <option value=0>Any</option>
-        {% for topic in topics %}
-            <option value={{topic.id}}>{{ topic.name }}</option>
-        {% endfor %}
-      </select>
-      Phone Num:
-      <input type="tel" name="number">
-      <input type="submit" value="Call" onclick="display();">
-    </form>
-
-    <div id="menu" style="display: none;">
-        Hi
-    </div>
-
-<!-- use an onclick action to hang up the call when the user presses
-    the button -->
-
-<!-- change these to input parameters -->
     {% if is_current %}
         <form class="Repeat" action="/repeat">
             <input type="hidden" name="call_sid" value={{call_sid}}>
@@ -49,5 +28,30 @@
             <input type="hidden" name="question_id" value={{question_id}}>
             <input type="submit" value="Upvote">
         </form>
+        <form action="/next-question">
+            <input type="hidden" name="call_sid" value={{call_sid}}>
+            <select name="topic_id">
+                <option value=0>Any</option>
+                {% for topic in topics %}
+                    <option value={{topic.id}}>{{ topic.name }}</option>
+                {% endfor %}
+            </select>
+            <input type="submit" value="Next Question">
+        </form>
+
+    {% else %}
+        <form class="call" action='/choose_question'>
+            Topic:
+            <select name="topic_id">
+                <option value=0>Any</option>
+                {% for topic in topics %}
+                    <option value={{topic.id}}>{{ topic.name }}</option>
+                {% endfor %}
+            </select>
+            Phone Num:
+            <input type="tel" name="number">
+            <input type="submit" value="Call" onclick="display();">
+        </form>
     {% endif %}
+    
 {% endblock %}
