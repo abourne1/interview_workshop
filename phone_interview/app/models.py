@@ -21,6 +21,7 @@ class Question(db.Model):
         self.hint = hint
         self.timestamp = datetime.datetime.now()
         self.answer = answer
+        self.popularity = 0
 
     def __repr__(self):
         return '<id {}>'.format(self.id)

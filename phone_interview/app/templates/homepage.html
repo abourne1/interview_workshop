@@ -24,16 +24,6 @@
 
 <!-- change these to input parameters -->
     {% if is_current %}
-        <form class="hangup" action="/hangup">
-            <input type="hidden" name="call_sid" value={{call_sid}}>
-            <input type="hidden" name="question_id" value={{question_id}}>
-            <input type="submit" value="Hangup">
-        </form>
-        <form class="upvote" action="/upvote">
-            <input type="hidden" name="call_sid" value={{call_sid}}>
-            <input type="hidden" name="question_id" value={{question_id}}>
-            <input type="submit" value="Upvote">
-        </form>
         <form class="Repeat" action="/repeat">
             <input type="hidden" name="call_sid" value={{call_sid}}>
             <input type="hidden" name="question_id" value={{question_id}}>
@@ -43,6 +33,21 @@
             <input type="hidden" name="call_sid" value={{call_sid}}>
             <input type="hidden" name="question_id" value={{question_id}}>
             <input type="submit" value="Hint">
+        </form>
+        <form class="Hint" action="/answer">
+            <input type="hidden" name="call_sid" value={{call_sid}}>
+            <input type="hidden" name="question_id" value={{question_id}}>
+            <input type="submit" value="Answer">
+        </form>
+        <form class="hangup" action="/hangup">
+            <input type="hidden" name="call_sid" value={{call_sid}}>
+            <input type="hidden" name="question_id" value={{question_id}}>
+            <input type="submit" value="Hangup">
+        </form>
+        <form class="upvote" action="/upvote">
+            <input type="hidden" name="call_sid" value={{call_sid}}>
+            <input type="hidden" name="question_id" value={{question_id}}>
+            <input type="submit" value="Upvote">
         </form>
     {% endif %}
 {% endblock %}
