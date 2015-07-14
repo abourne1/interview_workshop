@@ -9,17 +9,8 @@ from sqlalchemy import desc, func
 from app import app, db, mail, logger, client
 from twilio.util import TwilioCapability
 
-"""
-put a button on the website you can click, and recieve a phone call
-https://www.twilio.com/docs/howto/walkthrough/click-to-call/php/laravel#0
-Could make the home page one big phone button
-"""
-
-"""
-Here's an idea: intermediary twilio phone number. Press call, which calls a twilio number that is configured to
-1) record 2) dial a second number 3) end record. All repeat or hint commands go to the second twilio number, which
-performs those actions.
-"""
+from new import make_question, new
+# from recordings import 
 
 @app.route('/')
 def homepage():
@@ -77,8 +68,6 @@ def handle_call():
     logger.debug(question.popularity)
     resp = twilio.twiml.Response()
 
-    # record, say, and stay on the line. Allow the user to interact w/
-    # the call using buttons on the webpage
     if action == "repeat":
         resp.say(question.text)
     elif action == "hint":
@@ -107,7 +96,6 @@ def next_question():
         question_id=question.id
     )
 
-
 @app.route('/upvote', methods=['GET', 'POST'])
 def upvote():
     sid, question_id = get_sid_and_question_id()
@@ -123,7 +111,8 @@ def upvote():
         topics=db.session.query(Topic).all(),
         is_current=True,
         call_sid=sid,
-        question_id=question_id
+        question_id=question_id,
+        voted=True
     )
 
 @app.route('/repeat', methods=['GET', 'POST'])

@@ -23,11 +23,13 @@
             <input type="hidden" name="question_id" value={{question_id}}>
             <input type="submit" value="Hangup">
         </form>
-        <form class="upvote" action="/upvote">
-            <input type="hidden" name="call_sid" value={{call_sid}}>
-            <input type="hidden" name="question_id" value={{question_id}}>
-            <input type="submit" value="Upvote">
-        </form>
+        {% if not voted %}
+            <form class="upvote" action="/upvote">
+                <input type="hidden" name="call_sid" value={{call_sid}}>
+                <input type="hidden" name="question_id" value={{question_id}}>
+                <input type="submit" value="Upvote">
+            </form>
+        {% endif %}
         <form action="/next-question">
             <input type="hidden" name="call_sid" value={{call_sid}}>
             <select name="topic_id">
@@ -53,5 +55,5 @@
             <input type="submit" value="Call" onclick="display();">
         </form>
     {% endif %}
-    
+
 {% endblock %}
