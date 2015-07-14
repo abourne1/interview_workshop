@@ -4,4 +4,4 @@ config.py
 app.db
 search.db
 flask
-
+.idea
