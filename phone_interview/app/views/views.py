@@ -98,7 +98,7 @@ def next_question():
 
 @app.route('/upvote', methods=['GET', 'POST'])
 def upvote():
-    sid, question_id = get_sid_and_question_id()
+    sid, question_id, voted = get_params()
 
     question = db.session.query(Question).get(question_id)
     if question.popularity:
@@ -117,38 +117,43 @@ def upvote():
 
 @app.route('/repeat', methods=['GET', 'POST'])
 def repeat():
-    sid, question_id = get_sid_and_question_id()
+    sid, question_id, voted = get_params()
     update_call(sid, question_id, "repeat")
     return render_template(
         'homepage.html',
         topics=db.session.query(Topic).all(),
         is_current=True,
         call_sid=sid,
-        question_id=question_id
+        question_id=question_id,
+        voted=voted
     )
 
 @app.route('/hint', methods=['GET', 'POST'])
 def hint():
-    sid, question_id = get_sid_and_question_id()
+    sid, question_id, voted = get_params()
+
     update_call(sid, question_id, "hint")
     return render_template(
         'homepage.html',
         topics=db.session.query(Topic).all(),
         is_current=True,
         call_sid=sid,
-        question_id=question_id
+        question_id=question_id,
+        voted=voted
     )
 
 @app.route('/answer', methods=['GET', 'POST'])
 def answer():
-    sid, question_id = get_sid_and_question_id()
+    sid, question_id, voted = get_params()
+
     update_call(sid, question_id, "answer")
     return render_template(
         'homepage.html',
         topics=db.session.query(Topic).all(),
         is_current=True,
         call_sid=sid,
-        question_id=question_id
+        question_id=question_id,
+        voted=voted
     )
 
 @app.route('/hangup', methods=['GET', 'POST'])
@@ -161,10 +166,11 @@ def hangup():
         is_current=False
     )
 
-def get_sid_and_question_id():
+def get_params():
     sid = request.args.get('call_sid', '')
     question_id = request.args.get('question_id', '')
-    return sid, question_id
+    voted = request.args.get('voted', '')
+    return sid, question_id, voted
 
 def update_call(sid, question_id, action=""):
     url = "{}/handle_call?question_id={}&action={}".format(app.config['NGROK_ROUTE'], question_id, action)

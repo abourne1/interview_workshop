@@ -6,16 +6,19 @@
         <form class="Repeat" action="/repeat">
             <input type="hidden" name="call_sid" value={{call_sid}}>
             <input type="hidden" name="question_id" value={{question_id}}>
+            <input type="hidden" name="voted" value={{voted}}>
             <input type="submit" value="Repeat">
         </form>
         <form class="Hint" action="/hint">
             <input type="hidden" name="call_sid" value={{call_sid}}>
             <input type="hidden" name="question_id" value={{question_id}}>
+            <input type="hidden" name="voted" value={{voted}}>
             <input type="submit" value="Hint">
         </form>
         <form class="Hint" action="/answer">
             <input type="hidden" name="call_sid" value={{call_sid}}>
             <input type="hidden" name="question_id" value={{question_id}}>
+            <input type="hidden" name="voted" value={{voted}}>
             <input type="submit" value="Answer">
         </form>
         <form class="hangup" action="/hangup">
