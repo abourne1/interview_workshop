@@ -5,3 +5,4 @@ app.db
 search.db
 flask
 .idea
+workspace.xml

@@ -3,21 +3,41 @@ body {
 }
 
 .call-button {
-	height: 7%;
-	width: 7%;
-	margin: 1px 0 0 0;
+	height: 50px;
+	width: 65px;
 	font-size: 120%;
 	font-family: verdana;
 }
 
 .main-form{
-	margin: 20% 0 0 0;
+	margin-top: 20%;
 }
 
 .phone-input {
-	height: 7%;
+	height: 50px;
 }
 
 ::-webkit-input-placeholder {font-size: 120%; text-align: center;}
 :-moz-placeholder {font-size: 120%; text-align: center;}
 :-ms-input-placeholder {font-size: 120%; text-align: center;}
+
+.form-box{
+	margin-bottom: 2%;
+}
+
+.new-qs-btn {
+	margin-top: 5%;
+}
+
+.phone-img {
+	width: 1000px;
+}
+
+.box-name {
+	text-align: left;
+	display: block;
+}
+
+textarea {
+	width: 100%;
+}

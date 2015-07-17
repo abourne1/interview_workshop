@@ -2,30 +2,54 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Add A Question</h1>
-    <form action="/make" method="post" name="make_question">
-        Who are you? <input type="text" name="author"><br>
-        Difficulty:
-        <select name="difficulty">
-            <option value=1>{{difficulties[1]}} - easy</option>
-            {% for i in range(2,5) %}
-                <option value=i>{{difficulties[i]}}</option>
-            {% endfor %}
-            <option value=5>{{difficulties[5]}} - hard</option>
-        </select>
-        <br>
-        Topic:
-        <select name="topic_id">
-        {% for topic in topics %}
-            <option value={{topic.id}}>
-                {{ topic.name }}
-            </option>
-        {% endfor %}
-        </select><br>
-        <br>
-        Question:<br><textarea type="text" name="question"></textarea><br>
-        Hint:<br><textarea type="text" name="hint"></textarea><br>
-        Answer:<br><textarea type="text" name="answer"></textarea><br>
-        <input type="submit" value="Submit">
-    </form>
+    <h1 class="text-center">Add A Question</h1>
+    <div class="container-fluid">
+        <div class="row">
+            <div style="margin: 0 15%">
+                <form action="/make" method="post" name="make_question" class="form-inline text-center">
+                    <div class="form-box">
+                        <div class="box-name">
+                            <strong class="text-left">
+                                Topic
+                            </strong>
+                        </div>
+                        <select class="form-control" name="topic_id">
+                        {% for topic in topics %}
+                            <option value={{topic.id}}>
+                                {{ topic.name }}
+                            </option>
+                        {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-box">
+                        <div class="box-name">
+                            <strong class="text-left">
+                                Question
+                            </strong>
+                        </div>
+                        <textarea class="new-box form-control" type="text" name="question" rows="5"></textarea>
+                    </div>
+                    <div class="form-box">
+                        <div class="box-name">
+                            <strong class="text-left">
+                                Hint
+                            </strong>
+                        </div>
+                        <textarea class="new-box form-control" type="text" name="hint"></textarea>
+                    </div>
+                    <div>
+                        <div class="box-name">
+                            <strong class="text-left">
+                                Answer
+                            </strong>
+                        </div>
+                        <div style="display: block;">
+                            <textarea class="new-box" type="text" name="hint" cols="2" rows="10"/>
+                        </div>
+                    </div>
+                    <button class="new-qs-btn btn btn-lg btn-primary" type="submit" value="Submit" style="width: 100%; margin">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
 {% endblock %}

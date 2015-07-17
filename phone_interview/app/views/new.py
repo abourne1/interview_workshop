@@ -14,15 +14,7 @@ from twilio.rest import TwilioRestClient
 def make_question():
     return render_template(
         'new.html',
-        topics=db.session.query(Topic).all(),
-        questions=db.session.query(Question).all(),
-        difficulties={
-            1: "brogrammer",
-            2: "application developer",
-            3: "library writer",
-            4: "language creator",
-            5: "linus torvalds"
-        }
+        topics=db.session.query(Topic).all()
     )
 
 @app.route('/make', methods=['POST','GET'])

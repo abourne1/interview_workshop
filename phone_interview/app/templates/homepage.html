@@ -47,7 +47,12 @@
     {% else %}
     <form class="main-form form-inline text-center" action="/choose_question">
         <div class="form-group">
-            <input class="phone-input form-control" size="35" type="tel" name="number" placeholder="Phone Number...">
+            <div class="input-group">
+                <div class="phone-img input-group-addon">
+                    <span class="glyphicon glyphicon-earphone"></span>
+                </div>
+                <input class="phone-input form-control" size="35" type="tel" name="number" placeholder="Phone Number..." onfocus="this.placeholder = ''">
+            </div>
         </div>
         <button type="submit" class="call-button btn btn-default" value="Call">Call</button>
     </form>
