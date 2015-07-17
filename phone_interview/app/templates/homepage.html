@@ -45,18 +45,12 @@
         </form>
 
     {% else %}
-        <form class="call" action='/choose_question'>
-            Topic:
-            <select name="topic_id">
-                <option value=0>Any</option>
-                {% for topic in topics %}
-                    <option value={{topic.id}}>{{ topic.name }}</option>
-                {% endfor %}
-            </select>
-            Phone Num:
-            <input type="tel" name="number">
-            <input type="submit" value="Call" onclick="display();">
-        </form>
+    <form class="main-form form-inline text-center" action="/choose_question">
+        <div class="form-group">
+            <input class="phone-input form-control" size="35" type="tel" name="number" placeholder="Phone Number...">
+        </div>
+        <button type="submit" class="call-button btn btn-default" value="Call">Call</button>
+    </form>
     {% endif %}
 
 {% endblock %}

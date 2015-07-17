@@ -1,4 +1,11 @@
 <html>
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+
+  <link rel="stylesheet" href="../static/style.css">
+
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
   <head>
     {% if title %}
     <title>{{ title }} - microblog</title>
@@ -6,9 +13,24 @@
     <title>microblog</title>
     {% endif %}
   </head>
+
   <body>
-    <a href = "/">Home</a>
-    <a href = "/new">New Question</a>
+    <div class="navbar navbar-inverse navbar-top">
+      <div class="navbar-inner">
+        <div class="container span2">
+          <ul class="nav">
+            <li class="">
+              <a href = "/">Home</a>
+            </li>
+            <li class="">
+              <a href = "/new">New Question</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+
     {% with messages = get_flashed_messages() %}
     {% if messages %}
     <ul>

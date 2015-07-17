@@ -1,0 +1,23 @@
+body {
+	background-color: #eee
+}
+
+.call-button {
+	height: 7%;
+	width: 7%;
+	margin: 1px 0 0 0;
+	font-size: 120%;
+	font-family: verdana;
+}
+
+.main-form{
+	margin: 20% 0 0 0;
+}
+
+.phone-input {
+	height: 7%;
+}
+
+::-webkit-input-placeholder {font-size: 120%; text-align: center;}
+:-moz-placeholder {font-size: 120%; text-align: center;}
+:-ms-input-placeholder {font-size: 120%; text-align: center;}
