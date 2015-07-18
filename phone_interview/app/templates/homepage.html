@@ -45,16 +45,26 @@
         </form>
 
     {% else %}
+    <div class="jumbotron">
+        <h1 class="text-center">Get a Phone Interview</h1>
+    </div>
     <form class="main-form form-inline text-center" action="/choose_question">
-        <div class="form-group">
+        <select name="topic_id" id="select-topic" class="form-control phone-input">
+                <option value="" disabled selected>Select a topic</option>
+                <option value=0>Any</option>
+                {% for topic in topics %}
+                    <option value={{topic.id}}>{{ topic.name }}</option>
+                {% endfor %}
+            </select>
+        <div class="form-group call-form">
             <div class="input-group">
-                <div class="phone-img input-group-addon">
+                <div class="input-group-addon">
                     <span class="glyphicon glyphicon-earphone"></span>
                 </div>
                 <input class="phone-input form-control" size="35" type="tel" name="number" placeholder="Phone Number..." onfocus="this.placeholder = ''">
             </div>
         </div>
-        <button type="submit" class="call-button btn btn-default" value="Call">Call</button>
+        <button type="submit" class="call-button btn btn-primary" value="Call">Call</button>
     </form>
     {% endif %}
 

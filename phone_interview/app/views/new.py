@@ -11,25 +11,24 @@ from twilio.rest import TwilioRestClient
 
 
 @app.route('/new', methods=['GET', 'POST'])
-def make_question():
+def new():
     return render_template(
         'new.html',
         topics=db.session.query(Topic).all()
     )
 
 @app.route('/make', methods=['POST','GET'])
-def new():
+def make():
     # add validations, probably through a form class
+    print 1
     text=request.form['question']
     hint=request.form['hint']
     topic_id=request.form['topic_id']
-    author=request.form['author']
     answer=request.form['answer']
     new_question = Question(
         text=text,
         hint=hint,
         topic_id=topic_id,
-        author=author,
         answer=answer
     )
     db.session.add(new_question)

@@ -2,24 +2,29 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1 class="text-center">Add A Question</h1>
+    <div class="jumbotron">
+        <h1 class="text-center">Add A Question</h1>
+    </div>
     <div class="container-fluid">
         <div class="row">
-            <div style="margin: 0 15%">
-                <form action="/make" method="post" name="make_question" class="form-inline text-center">
+            <div class="margin-15">
+                <form action="/make" method="post" class="form-inline text-center">
                     <div class="form-box">
                         <div class="box-name">
                             <strong class="text-left">
                                 Topic
                             </strong>
                         </div>
-                        <select class="form-control" name="topic_id">
-                        {% for topic in topics %}
-                            <option value={{topic.id}}>
-                                {{ topic.name }}
-                            </option>
-                        {% endfor %}
-                        </select>
+                        <div style="display: block;">
+                            <select id="new-box" class="form-control" name="topic_id">
+                            <option value="" disabled selected>Select your option</option>
+                            {% for topic in topics %}
+                                <option value={{topic.id}}>
+                                    {{ topic.name }}
+                                </option>
+                            {% endfor %}
+                            </select>
+                        </div>
                     </div>
                     <div class="form-box">
                         <div class="box-name">
@@ -27,7 +32,9 @@
                                 Question
                             </strong>
                         </div>
-                        <textarea class="new-box form-control" type="text" name="question" rows="5"></textarea>
+                        <div style="display: block;">
+                            <textarea id="new-box" class="form-control" type="text" name="question" rows="5"></textarea>
+                        </div>
                     </div>
                     <div class="form-box">
                         <div class="box-name">
@@ -35,7 +42,9 @@
                                 Hint
                             </strong>
                         </div>
-                        <textarea class="new-box form-control" type="text" name="hint"></textarea>
+                        <div style="display: block;">
+                            <textarea id="new-box" class="form-control" type="text" name="hint"></textarea>
+                        </div>
                     </div>
                     <div>
                         <div class="box-name">
@@ -44,7 +53,7 @@
                             </strong>
                         </div>
                         <div style="display: block;">
-                            <textarea class="new-box" type="text" name="hint" cols="2" rows="10"/>
+                            <textarea id="new-box" class="form-control" type="text" name="answer" rows="5"></textarea>
                         </div>
                     </div>
                     <button class="new-qs-btn btn btn-lg btn-primary" type="submit" value="Submit" style="width: 100%; margin">Submit</button>

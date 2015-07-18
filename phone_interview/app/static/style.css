@@ -1,5 +1,58 @@
+::-webkit-input-placeholder {font-size: 120%; text-align: center;}
+:-moz-placeholder {font-size: 120%; text-align: center;}
+:-ms-input-placeholder {font-size: 120%; text-align: center;}
+
 body {
-	background-color: #eee
+	background-color: #CCF5FF;
+	margin-bottom: 5%;
+}
+
+.flash:hover{
+	background-color: black;
+}
+
+a {
+	color: #eee;
+	font-size: 120%;
+	font-family: verdana;
+}
+
+a:hover{
+	color: 	#3385FF;
+	text-decoration: none;
+}
+
+li {
+}
+
+.flash-div {
+	position: relative;
+	text-align: center;
+	font-size: 120%;
+}
+
+.flash-ul{
+	text-decoration: none;
+}
+
+.flash-li{
+	text-decoration: none;
+	color: black;
+	font-size: 120%;
+	font-family: verdana
+	background-color: #FFFFA3;
+}
+
+.navbar {
+	height: 8%;
+}
+
+.nav-links {
+	margin: 22px 0 30px 12px;
+}
+
+.jumbotron {
+	background-color: #CCF5FF;
 }
 
 .call-button {
@@ -9,17 +62,10 @@ body {
 	font-family: verdana;
 }
 
-.main-form{
-	margin-top: 20%;
-}
-
 .phone-input {
 	height: 50px;
+	font-size: 130%;
 }
-
-::-webkit-input-placeholder {font-size: 120%; text-align: center;}
-:-moz-placeholder {font-size: 120%; text-align: center;}
-:-ms-input-placeholder {font-size: 120%; text-align: center;}
 
 .form-box{
 	margin-bottom: 2%;
@@ -29,15 +75,46 @@ body {
 	margin-top: 5%;
 }
 
-.phone-img {
-	width: 1000px;
-}
-
 .box-name {
 	text-align: left;
 	display: block;
 }
 
-textarea {
+#new-box {
+	border-color: #ccc;
+	border-radius: 5px;
 	width: 100%;
+	font-size: 120%;
+	padding: 1%;
+}
+
+.margin-15 {
+	margin: 0 15%;
+}
+
+#select-topic{
+	width: 460px; 
+	display: block; 
+	margin: 0 auto 5% auto;"
+}
+
+@media (max-width: 768px) {
+  .call-button {
+  	position: relative;
+    width: 90%;
+  }
+
+  .call-form {
+  	margin-left: 5%;
+  	width: 90%;
+  }
+
+  .margin-15 {
+  	margin: 10%;
+  }
+
+  #select-topic {
+  	width: 90%;
+  }
+
 }
