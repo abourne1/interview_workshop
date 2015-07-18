@@ -3,8 +3,14 @@
 :-ms-input-placeholder {font-size: 120%; text-align: center;}
 
 body {
-	background-color: #CCF5FF;
+	background-color: #F0F7FF;
 	margin-bottom: 5%;
+	font-family: "Josefin Sans";
+}
+
+.jumbotron {
+	background-color: #F0F7FF;
+	padding: 40px 0;
 }
 
 .flash:hover{
@@ -22,7 +28,13 @@ a:hover{
 	text-decoration: none;
 }
 
-li {
+.in-call {
+	text-align: center;
+}
+
+
+.input-group {
+	width: 500px;
 }
 
 .flash-div {
@@ -51,10 +63,6 @@ li {
 	margin: 22px 0 30px 12px;
 }
 
-.jumbotron {
-	background-color: #CCF5FF;
-}
-
 .call-button {
 	height: 50px;
 	width: 65px;
@@ -63,6 +71,7 @@ li {
 }
 
 .phone-input {
+	width: 500px;
 	height: 50px;
 	font-size: 130%;
 }
@@ -93,7 +102,7 @@ li {
 }
 
 #select-topic{
-	width: 460px; 
+	width: 575px; 
 	display: block; 
 	margin: 0 auto 5% auto;"
 }
@@ -102,6 +111,10 @@ li {
   .call-button {
   	position: relative;
     width: 90%;
+  }
+
+  .input-group {
+  	width: 100%;
   }
 
   .call-form {
