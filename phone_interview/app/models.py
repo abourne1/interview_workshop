@@ -13,14 +13,16 @@ class Question(db.Model):
     timestamp = db.Column(db.DateTime)
     popularity = db.Column(db.Integer)
     answer = db.Column(db.Text(2000))
+    language = db.Column(db.String(64))
 
-    def __init__(self, text, hint, topic_id, answer):
+    def __init__(self, text, hint, topic_id, answer, language):
         self.topic_id = topic_id
         self.text = text
         self.hint = hint
         self.timestamp = datetime.datetime.now()
         self.answer = answer
         self.popularity = 0
+        language=language
 
     def __repr__(self):
         return '<id {}>'.format(self.id)

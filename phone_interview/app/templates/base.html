@@ -1,16 +1,20 @@
 <html>
+<head>
   <!-- Latest compiled and minified CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
 
   <link href='http://fonts.googleapis.com/css?family=Josefin+Sans' rel='stylesheet' type='text/css'>
-  <link rel="stylesheet" href="../static/style.css">
+  <link rel="stylesheet" href="static/style.css">
 
   <!-- Latest compiled and minified JavaScript -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
+
   <script type="text/javascript" src="static/bower_components/recorderjs/recorder.js"></script>
-  <head>
+  <script type="text/javascript" src="static/js/record.js"></script>
+  <script type="text/javascript" src="static/js/src/ace.js"></script>
+  
     {% if title %}
     <title>{{ title }} - microblog</title>
     {% else %}
@@ -21,8 +25,9 @@
   function remove() {
     var x = document.getElementById("flash");
     x.style.visibility="hidden";
-  }
+  };
   </script>
+
   </head>
 
   <body>
@@ -43,16 +48,19 @@
     </div>
 
     {% with messages = get_flashed_messages() %}
-    {% if messages %}
-    <div id="flash" class="flash-div">
-      <ul class="list-unstyled">
-      {% for message in messages %}
-      <button class="flash" style="width:100%; background-color: #FFFFA3;" onclick="remove();"><li class="flash-li" style="margin: 10px 0 5px 0;">{{ message }}<span class="glyphicon glyphicon-remove-circle" style="float: right;"></span></li></button>
-      {% endfor %}
-      </ul>
-    </div>
-    {% endif %}
+      {% if messages %}
+        <div id="flash" class="flash-div">
+          <ul class="list-unstyled">
+            {% for message in messages %}
+              <button class="flash" style="width:100%; background-color: #FFFFA3;" onclick="remove();"><li class="flash-li" style="margin: 10px 0 5px 0;">{{ message }}<span class="glyphicon glyphicon-remove-circle" style="float: right;"></span></li></button>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
     {% endwith %}
-    {% block content %}{% endblock %}
+
+    {% block content %}
+
+    {% endblock %}
   </body>
 </html>

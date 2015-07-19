@@ -6,13 +6,20 @@
         <h1 class="text-center">Get a Phone Interview</h1>
     </div>
     <form class="main-form form-inline text-center" action="/choose_question">
-        <select name="topic_id" id="select-topic" class="form-control phone-input">
-                <option value="" disabled selected>Select a topic</option>
-                <option value=0>Any</option>
-                {% for topic in topics %}
-                    <option value={{topic.id}}>{{ topic.name }}</option>
-                {% endfor %}
+        <div class="row" style="">
+            <select name="topic_id" id="select-topic" class="form-control phone-input">
+                    <option value="" disabled selected>Select a topic</option>
+                    <option value=0>Any</option>
+                    {% for topic in topics %}
+                        <option value={{topic.id}}>{{ topic.name }}</option>
+                    {% endfor %}
             </select>
+            <div style="display:inline;">
+                <label class="checkbox-inline" style="margin: 0 0 4% 4%;">
+                    <input type="checkbox" name="if_record"><span style="font-size:120%;">Record?</span></input>
+                </label>
+            </div>
+        </div>
         <div class="form-group call-form">
             <div class="input-group">
                 <div class="input-group-addon">

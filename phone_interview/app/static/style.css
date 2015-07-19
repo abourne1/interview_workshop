@@ -2,6 +2,23 @@
 :-moz-placeholder {font-size: 120%; text-align: center;}
 :-ms-input-placeholder {font-size: 120%; text-align: center;}
 
+.editor { 
+    position: absolute;
+    top: 13;
+    right: 15;
+    left: 15;
+    height: 92%;
+    width: 96%;
+    font-size: 90%;
+}
+
+.editor-border{
+	background-color: #ddd;
+    position: relative;
+    height: 300px;
+    border-radius:5px;
+}
+
 body {
 	background-color: #F0F7FF;
 	margin-bottom: 5%;
@@ -108,7 +125,7 @@ a:hover{
 	display: block;
 }
 
-#new-box {
+#new-box, #language {
 	border-color: #ccc;
 	border-radius: 5px;
 	width: 100%;
@@ -121,8 +138,8 @@ a:hover{
 }
 
 #select-topic{
-	width: 575px; 
-	display: block; 
+	width: 460px; 
+	display: inline; 
 	margin: 0 auto 5% auto;"
 }
 

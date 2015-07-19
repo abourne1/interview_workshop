@@ -3,59 +3,7 @@
 
 {% block content %}
 
-    <script>
-        var navigator = window.navigator;
-        navigator.getUserMedia = (
-          navigator.getUserMedia ||
-            navigator.webkitGetUserMedia ||
-            navigator.mozGetUserMedia ||
-            navigator.msGetUserMedia
-        );
-
-        var Context = window.AudioContext || window.webkitAudioContext;
-        var context = new Context();
-
-        var mediaStream;
-        var rec;
-
-        function record() {
-          // ask for permission and start recording
-          navigator.getUserMedia({audio: true}, function(localMediaStream){
-            mediaStream = localMediaStream;
-
-            // create a stream source to pass to Recorder.js
-            var mediaStreamSource = context.createMediaStreamSource(localMediaStream);
-
-            // create new instance of Recorder.js using the mediaStreamSource
-            rec = new Recorder(mediaStreamSource, {
-              // pass the path to recorderWorker.js file here
-              workerPath: '/bower_components/Recorderjs/recorderWorker.js'
-            });
-
-            // start recording
-            rec.record();
-          }, function(err){
-            console.log('Browser not supported');
-          });
-        }
-        
-        function stop() {
-          // stop the media stream
-          mediaStream.stop();
-
-          // stop Recorder.js
-          rec.stop();
-
-          // export it to WAV
-          rec.exportWAV(function(e){
-            rec.clear();
-            Recorder.forceDownload(e, "filename.wav");
-          });
-        }
-    </script>
-
-    <button onclick="record()">Record</button>
-    <button onclick="stop()">Stop</button>
+<!-- javascript funciton that on submit, takes the text from the code editor ans submits is as the answer -->    
 
     <div class="jumbotron">
         <h1 class="text-center">Add A Question</h1>
@@ -77,6 +25,23 @@
                             {% for topic in topics %}
                                 <option value={{topic.id}}>
                                     {{ topic.name }}
+                                </option>
+                            {% endfor %}
+                            </select>
+                        </div>
+
+
+                        <div class="box-name" style="margin-top: 2%;">
+                            <strong class="text-left">
+                                Language
+                            </strong>
+                        </div>
+                        <div style="display: block;">
+                            <select onchange="set_lang();" id="language" class="form-control" name="language">
+                            <option value="" disabled selected>Select your option</option>
+                            {% for l in languages %}
+                                <option>
+                                    {{ l }}
                                 </option>
                             {% endfor %}
                             </select>
@@ -108,13 +73,36 @@
                                 Answer
                             </strong>
                         </div>
-                        <div style="display: block;">
-                            <textarea id="new-box" class="form-control" type="text" name="answer" rows="5"></textarea>
+                        <div id="editor-border" class="editor-border new-box">
+                            <div id="editor" class="editor text-left"></div>
                         </div>
                     </div>
+                    <input type="hidden" name="answer" value="get_code();">
                     <button class="new-qs-btn btn btn-lg btn-primary" type="submit" value="Submit" style="width: 100%; margin">Submit</button>
                 </form>
+
             </div>
         </div>
     </div>
+
+    <script>
+        var editor = ace.edit("editor");
+        editor.setTheme("ace/theme/clouds");
+        // let the user choose language, and set it
+
+        var set_lang = function() {
+            var select = document.getElementById("language");
+            var lang = select.options[select.selectedIndex].text;
+            console.log(lang)
+            editor.getSession().setMode("ace/mode/" + lang);
+        }
+      
+
+        var get_code = function(){
+            var val= editor.getValue();
+            document.getElementById("test").innerHTML = val;
+        }
+
+        window.onresize = editor.resize();
+  </script>
 {% endblock %}

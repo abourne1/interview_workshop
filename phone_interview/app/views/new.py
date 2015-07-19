@@ -12,9 +12,17 @@ from twilio.util import TwilioCapability
 
 @app.route('/new', methods=['GET', 'POST'])
 def new():
+    filename = "../interview_workshop/phone_interview/recordings/" + "recording-" + str(db.session.query(Recording).count() + 1) + ".wav"
     return render_template(
         'new.html',
-        topics=db.session.query(Topic).all()
+        topics=db.session.query(Topic).all(),
+        filename = filename,
+        languages=[
+            "python",
+            "java",
+            "javascript",
+            "c"
+        ]
     )
 
 @app.route('/make', methods=['POST'])
@@ -24,26 +32,21 @@ def make():
     hint=request.form['hint']
     topic_id=request.form['topic_id']
     answer=request.form['answer']
+    language=request.form['language']
     new_question = Question(
         text=text,
         hint=hint,
         topic_id=topic_id,
-        answer=answer
+        answer=answer,
+        language=language
     )
     db.session.add(new_question)
     db.session.commit()
     flash('Question created')
-    # msg = Message(
-    #     "New Question",
-    #     sender="from@example.com",
-    #     recipients=[app.config['EMAIL_ADDR']]
-    # )
-    #msg.body("A new question has been submitted:\n" + text + "\n" + hint)
-    #mail.send(msg)
-    print 34
+
     return render_template(
         'homepage.html',
         topics=db.session.query(Topic).all(),
         questions=db.session.query(Question).all()
     )
-# from recordings import 
+
