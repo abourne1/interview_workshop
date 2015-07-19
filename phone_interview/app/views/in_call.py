@@ -9,6 +9,12 @@ from sqlalchemy import desc, func
 from app import app, db, mail, logger, client
 from twilio.util import TwilioCapability
 
+@app.route('/in_call', methods=["GET"])
+def in_call():
+    return render_template(
+        'in_call.html'
+    )
+
 @app.route('/next-question', methods=['GET', 'POST'])
 def next_question():
     sid = request.args.get('call_sid', '')

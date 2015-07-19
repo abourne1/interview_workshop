@@ -8,7 +8,8 @@
   <!-- Latest compiled and minified JavaScript -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-  <script src="../javascript/wavesurfer.js"></script>
+
+  <script type="text/javascript" src="static/bower_components/recorderjs/recorder.js"></script>
   <head>
     {% if title %}
     <title>{{ title }} - microblog</title>
@@ -26,17 +27,19 @@
 
   <body>
     <div class="top-bar navbar navbar-inverse navbar-top">
+      <div id="collapse">
           <ul class="nav-links list-inline">
             <li class="">
               <a href = "/"><span class="glyphicon glyphicon-phone-alt"></span> + <span  class="glyphicon glyphicon-education"></span></a>
             </li>
-            <li style="margin: 0 0 0 30px;">
+            <li style="margin: 0 0 0 15px;">
               <a href = "/new">Add Question</a>
             </li>
-            <li style="margin: 0 0 0 30px;">
+            <li style="margin: 0 0 0 15px;">
               <a href = "/recordings">Play Recordings</a>
             </li>
           </ul>
+        </div>
     </div>
 
     {% with messages = get_flashed_messages() %}

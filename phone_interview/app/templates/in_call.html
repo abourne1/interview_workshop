@@ -1,56 +1,56 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <div class="in-call">
-        <form class="in-call form-inline" action="/repeat">
-            <input type="hidden" name="call_sid" value={{call_sid}}>
-            <input type="hidden" name="question_id" value={{question_id}}>
-            <input type="hidden" name="voted" value={{voted}}>
-            <input class="form-control" type="submit" value="Repeat">
-        </form>
+    <div class="jumbotron">
+        <h1 class="text-center">Control Phone Call</h1>
     </div>
     <div class="in-call">
-        <form class="in-call form-inline" action="/hint">
+        <form style="display:inline;" class="in-call form-inline" action="/next-question">
             <input type="hidden" name="call_sid" value={{call_sid}}>
-            <input type="hidden" name="question_id" value={{question_id}}>
-            <input type="hidden" name="voted" value={{voted}}>
-            <input class="form-control" type="submit" value="Hint">
-        </form>
-    </div>
-    <div class="in-call">
-        <form class="in-call form-inline" action="/answer">
-            <input type="hidden" name="call_sid" value={{call_sid}}>
-            <input type="hidden" name="question_id" value={{question_id}}>
-            <input type="hidden" name="voted" value={{voted}}>
-            <input class="form-control" type="submit" value="Answer">
-        </form>
-    </div>
-    <div class="in-call">
-        <form class="in-call form-inline" action="/hangup">
-            <input type="hidden" name="call_sid" value={{call_sid}}>
-            <input type="hidden" name="question_id" value={{question_id}}>
-            <input class="form-control" type="submit" value="Hangup">
-        </form>
-    </div>
-    {% if not voted %}
-    <div class="in-call">
-        <form class="in-call form-inline" action="/upvote">
-            <input type="hidden" name="call_sid" value={{call_sid}}>
-            <input type="hidden" name="question_id" value={{question_id}}>
-            <input class="form-control" type="submit" value="Upvote">
-        </form>
-    </div>
-    {% endif %}
-    <div class="in-call">
-        <form class="in-call form-inline" action="/next-question">
-            <input type="hidden" name="call_sid" value={{call_sid}}>
-            <select name="topic_id" class="form-control">
+            <select id="next-call-select" name="topic_id" class="btn btn-default form-control">
+                <option value="" disabled selected>Next Question Topic</option>
                 <option value=0>Any</option>
                 {% for topic in topics %}
                     <option value={{topic.id}}>{{ topic.name }}</option>
                 {% endfor %}
             </select>
-            <input class="form-control" type="submit" value="Next Question">
+            <input id="next-call-btn" class="btn in-call-btn btn-primary form-control" type="submit" value="Go To Next Question">
         </form>
+    </div>
+    <div class="in-call">
+        <form style="display:inline;"class="in-call form-inline" action="/repeat">
+            <input type="hidden" name="call_sid" value={{call_sid}}>
+            <input type="hidden" name="question_id" value={{question_id}}>
+            <input type="hidden" name="voted" value={{voted}}>
+            <input id="in-call-btn" class="btn btn-default form-control" type="submit" value="Repeat">
+        </form>
+        <form style="display:inline;" class="in-call form-inline" action="/hint">
+            <input type="hidden" name="call_sid" value={{call_sid}}>
+            <input type="hidden" name="question_id" value={{question_id}}>
+            <input type="hidden" name="voted" value={{voted}}>
+            <input id="in-call-btn" class="btn in-call-btn btn-default form-control" type="submit" value="Hint">
+        </form>
+    </div>
+    <div class="in-call">
+        <form style="display:inline;" class="in-call form-inline" action="/answer">
+            <input type="hidden" name="call_sid" value={{call_sid}}>
+            <input type="hidden" name="question_id" value={{question_id}}>
+            <input type="hidden" name="voted" value={{voted}}>
+            <input id="in-call-btn" class="btn in-call-btn btn-default form-control" type="submit" value="Answer">
+        </form>
+        <form style="display:inline;" class="in-call form-inline" action="/hangup">
+            <input type="hidden" name="call_sid" value={{call_sid}}>
+            <input type="hidden" name="question_id" value={{question_id}}>
+            <input id="in-call-btn" class="btn in-call-btn btn-default form-control" type="submit" value="Hangup">
+        </form>
+    </div>
+    <div class="in-call">
+    {% if not voted %}
+        <form style="display:inline;" id="in-call-btn" class="in-call form-inline" action="/upvote">
+            <input type="hidden" name="call_sid" value={{call_sid}}>
+            <input type="hidden" name="question_id" value={{question_id}}>
+            <input id="in-call-btn" class="btn in-call-btn btn-default form-control" type="submit" value="Upvote">
+        </form>
+    {% endif %}
     </div>
 {% endblock %}

@@ -37,6 +37,20 @@ a:hover{
 	text-align: center;
 }
 
+#in-call-btn {
+	width: 200px;
+	height: 60px;
+	margin: 0 2% 2% 2%;
+	font-size: 140%;
+}
+
+#next-call-btn, #next-call-select {
+	width: 200px;
+	height: 60px;
+	margin: 0 1% 5% 1%;
+	font-size: 140%;
+}
+
 
 .input-group {
 	width: 500px;
@@ -103,7 +117,7 @@ a:hover{
 }
 
 .margin-15 {
-	margin: 0 15%;
+	margin: 0 10%;
 }
 
 #select-topic{
@@ -128,11 +142,16 @@ a:hover{
   }
 
   .margin-15 {
-  	margin: 10%;
+  	margin: 0 10%;
   }
 
   #select-topic {
   	width: 90%;
   }
-
 }
+
+@media screen (max-width: 400px) {
+	.in-call {
+  		margin-bottom: 30px;
+  	}
+  }
