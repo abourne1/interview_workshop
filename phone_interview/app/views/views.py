@@ -2,6 +2,7 @@ import logging
 import random
 import urllib2
 import twilio.twiml
+import time
 from flask import Flask, render_template, redirect, url_for, request, flash
 from app.models import Topic, Question, Recording
 from flask.ext.mail import Message, Mail
@@ -10,7 +11,7 @@ from app import app, db, mail, logger, client
 from twilio.util import TwilioCapability
 from new import new, make
 from in_call import next_question, upvote, repeat, hint, answer, hangup
-from recordings import handle_recording
+from recordings import handle_recording, recordings
 
 """
 7/18/2015 Notes and betterments:
@@ -41,12 +42,11 @@ def choose_question():
         url=url,
         record=True,
         status_callback=app.config['NGROK_ROUTE'] + "/handle_recording",
-        status_callback_method="POST",
-        if_machine="Hangup"
+        status_callback_method="POST"
     )
 
     return render_template(
-        'homepage.html',
+        'in_call.html',
         topics=db.session.query(Topic).all(),
         is_current=True,
         call_sid=call.sid,

@@ -9,6 +9,14 @@ from sqlalchemy import desc, func
 from app import app, db, mail, logger, client
 from twilio.util import TwilioCapability
 
+@app.route('/recordings', methods=["GET","POST"])
+def recordings():
+    return render_template(
+        'recordings.html',
+        recordings=db.session.query(Recording).order_by(Recording.timestamp.desc()).all()
+    )
+
+
 @app.route('/handle_recording', methods=["GET","POST"])
 def handle_recording():
     new_recording = Recording(

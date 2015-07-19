@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="jumbotron">
+        <h1 class="text-center">Hear Recordings</h1>
+    </div>
+    <div class="recordings text-center">
+        <ul class="list-unstyled">
+            {% for r in recordings %}
+                <li>
+                    <div class="row">
+                        <small style="display: block; font-size: 120%;">{{r.prettify()}}</small>
+                        <audio controls>
+                          <source src={{r.url}} type="audio/ogg">
+                          <source src={{r.url}} type="audio/mpeg">
+                        Your browser does not support the audio element.
+                        </audio>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}

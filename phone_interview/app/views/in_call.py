@@ -16,7 +16,7 @@ def next_question():
     question = choose_question(topic_id)
     update_call(sid, question.id)
     return render_template(
-        'homepage.html',
+        'in_call.html',
         topics=db.session.query(Topic).all(),
         is_current=True,
         call_sid=sid,
@@ -34,7 +34,7 @@ def upvote():
         question.popularity = 1
     db.session.commit()
     return render_template(
-        'homepage.html',
+        'in_call.html',
         topics=db.session.query(Topic).all(),
         is_current=True,
         call_sid=sid,
@@ -47,7 +47,7 @@ def repeat():
     sid, question_id, voted = get_params()
     update_call(sid, question_id, "repeat")
     return render_template(
-        'homepage.html',
+        'in_call.html',
         topics=db.session.query(Topic).all(),
         is_current=True,
         call_sid=sid,
@@ -61,7 +61,7 @@ def hint():
 
     update_call(sid, question_id, "hint")
     return render_template(
-        'homepage.html',
+        'in_call.html',
         topics=db.session.query(Topic).all(),
         is_current=True,
         call_sid=sid,
@@ -75,7 +75,7 @@ def answer():
 
     update_call(sid, question_id, "answer")
     return render_template(
-        'homepage.html',
+        'in_call.html',
         topics=db.session.query(Topic).all(),
         is_current=True,
         call_sid=sid,
@@ -86,14 +86,11 @@ def answer():
 @app.route('/hangup', methods=['GET', 'POST'])
 def hangup():
     sid = request.args.get('call_sid', '')
-    call = client.calls.get(sid)
     call = client.calls.update(sid, status="completed")
-    recording = db.session.query(Recording).filter(Recording.call_sid == call.sid).first()
     return render_template(
         'homepage.html',
         topics=db.session.query(Topic).all(),
-        is_current=False,
-        recording=recording
+        is_current=False
     )
 
 def get_params():
