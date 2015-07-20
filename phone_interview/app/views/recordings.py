@@ -19,6 +19,8 @@ def recordings():
 
 @app.route('/handle_recording', methods=["GET","POST"])
 def handle_recording():
+    print "HERE!"
+    print request.form
     new_recording = Recording(
         url=request.form['RecordingUrl'],
         call_sid=request.form['CallSid'],

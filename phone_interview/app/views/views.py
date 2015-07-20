@@ -26,11 +26,11 @@ def homepage():
 def choose_question():
     topic_id = request.args.get('topic_id', '')
     phone_number = request.args.get('number', '')
+    print request.args
     record = ("on" == request.args.get('if_record', ''))
+    print record
     logger.debug(record)
     question = pick_question(topic_id)
-    print question.text
-    print question.language
     url = "{}/handle_call?question_id={}&action=speak".format(app.config['NGROK_ROUTE'], question.id)
     call = client.calls.create(
         to=phone_number,

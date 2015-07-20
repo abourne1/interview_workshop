@@ -50,12 +50,11 @@ class Recording(db.Model):
     question_id = db.Column(db.Integer, db.ForeignKey('questions.id'))
     timestamp = db.Column(db.DateTime)
 
-    def __init__(self, url, call_sid, recording_sid, question_id):
+    def __init__(self, url, call_sid, recording_sid):
         self.url = url
         self.call_sid = call_sid
         self.recording_sid = recording_sid
         self.timestamp = datetime.datetime.now()
-        self.question_id = question_id
 
     def question(self):
         if self.question_id:
