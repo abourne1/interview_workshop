@@ -11,7 +11,7 @@
 <!-- start!!!!!! -->
     <div class="row" style="height:75%;">
 
-                <div class="padding-5" style="float: left; width: 34%; height: 100%; margin: 5% 0 0 3%">
+                <div class="padding-5" style="float: left; width: 34%; height: 100%; margin: 2% 0 0 3%">
                     <div class="in-call">
                         <form style="display:inline;" class="in-call form-inline" action="/next-question">
                             <input type="hidden" name="call_sid" value={{call_sid}}>
@@ -62,8 +62,8 @@
 
                     <div class="in-call">
                         <div style="display:inline;" class="in-call-btn form-inline">
-                            <input id="show-answer" onclick="show_answer({{language}});" class="btn in-call-btn btn-default form-control" type="submit" value="Show Answer" style="width: 200px;height: 60px;margin: 0 2% 2% 2%;font-size: 140%;">
-                            <button id="hide-answer" style="display:none; width: 200px;height: 60px;margin: 0 2% 2% 2%;font-size: 140%;" onclick="hide_answer({{answer_language}});" class="btn form-control answer-btn btn-default">Hide Answer</button>
+                            <input id="show-answer" onclick='show_answer( "{{answer_language}}" );' class="btn in-call-btn btn-default form-control" type="submit" value="Show Answer" style="width: 200px;height: 60px;margin: 0 2% 2% 2%;font-size: 140%;">
+                            <button id="hide-answer" style="display:none; width: 200px;height: 60px;margin: 0 2% 2% 2%;font-size: 140%;" onclick='hide_answer( "{{language}}" );' class="btn form-control answer-btn btn-default">Hide Answer</button>
                         </div>
 
                         {% if not voted %}
@@ -81,9 +81,16 @@
                         {% endif %}
 
                     </div>
+
+                    <div class="in-call">
+                        <form class="in-call-btn form-inline" action="\hangup">
+                            <input type="hidden" name="call_sid" value={{call_sid}}>
+                            <input type="submit" id="in-call-btn" class="btn in-call-btn btn-default form-control" value="Hangup">
+                        </form>
+                    </div>
                 </div>
 
-                <div id="editor-user" style="float: right; width:58%; height: 90%; margin: 0 2% 0 0;">
+                <div id="editor-user" style="float: right; width:58%; height: 97%; margin: 0 2% 0 0;">
                     <div id="editor-border" class="editor-border">
                         <div id="editor" class="editor text-left">{{user_input}}</div>
                     </div>
@@ -121,12 +128,13 @@
             return lang;
         }
 
-        var show_answer = function(quesiton_lang) {
+        var show_answer = function(question_lang) {
             $("#editor-user").hide();
             $("#editor-answer").show();
             $("#show-answer").hide();
             $("#hide-answer").show();
-            editor.getSession().setMode("ace/mode/" + question_lang)
+            console.log(question_lang)
+            editor2.getSession().setMode("ace/mode/" + question_lang)
         }
 
         var hide_answer = function(answer_lang) {
@@ -134,6 +142,7 @@
             $("#editor-user").show();
             $("#hide-answer").hide();
             $("#show-answer").show();
+            console.log(answer_lang)
             editor.getSession().setMode("ace/mode/" + answer_lang)
         }
 

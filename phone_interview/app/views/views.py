@@ -10,16 +10,8 @@ from sqlalchemy import desc, func
 from app import app, db, mail, logger, client
 from twilio.util import TwilioCapability
 from new import new, make
-from in_call import next_question, upvote, repeat, hint, pick_question
+from in_call import next_question, upvote, repeat, hint, pick_question, hangup
 from recordings import handle_recording, recordings
-
-"""
-7/18/2015 Notes and betterments:
-
-Make a user model, add login, store all recordings for a user. Add a media player to let users listen to their recordings
-
-If really feeling like it, let user submit audio questions
-"""
 
 @app.route('/')
 def homepage():
@@ -37,6 +29,8 @@ def choose_question():
     record = ("on" == request.args.get('if_record', ''))
     logger.debug(record)
     question = pick_question(topic_id)
+    print question.text
+    print question.language
     url = "{}/handle_call?question_id={}&action=speak".format(app.config['NGROK_ROUTE'], question.id)
     call = client.calls.create(
         to=phone_number,
@@ -55,7 +49,7 @@ def choose_question():
         question_id=question.id,
         languages=app.config["LANGUAGES"],
         answer=question.answer,
-        answer_language=question.language
+        answer_language=str(question.language)
     )
 
 @app.route('/handle_call', methods=['GET', 'POST'])

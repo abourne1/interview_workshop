@@ -22,7 +22,7 @@ class Question(db.Model):
         self.timestamp = datetime.datetime.now()
         self.answer = answer
         self.popularity = 0
-        language=language
+        self.language=language
 
     def __repr__(self):
         return '<id {}>'.format(self.id)
@@ -50,11 +50,12 @@ class Recording(db.Model):
     question_id = db.Column(db.Integer, db.ForeignKey('questions.id'))
     timestamp = db.Column(db.DateTime)
 
-    def __init__(self, url, call_sid, recording_sid):
+    def __init__(self, url, call_sid, recording_sid, question_id):
         self.url = url
         self.call_sid = call_sid
         self.recording_sid = recording_sid
         self.timestamp = datetime.datetime.now()
+        self.question_id = question_id
 
     def question(self):
         if self.question_id:

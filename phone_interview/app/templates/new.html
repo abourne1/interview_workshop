@@ -12,7 +12,7 @@
 
             <div class="row" style="height:75%;">
 
-                <div class="padding-5" style="float: left; width: 50%; height: 100%;">
+                <div class="padding-5" style="float: left; width: 40%; height: 100%; margin-left: 2%;">
                     <div class="inline">
                         <div class="">
                             <strong class="text-left">
@@ -21,7 +21,7 @@
                         </div>
                         <div>
                             <select class="form-control" name="topic_id" style="width: 100%;">
-                            <option value="" disabled selected>Select your option</option>
+                            <option value="" disabled selected>Select topic</option>
                             {% for topic in topics %}
                                 <option value={{topic.id}}>
                                     {{ topic.name }}
@@ -39,17 +39,17 @@
                         </div>
                         <div>
                             <select onchange="set_lang();" class="form-control" id="language" name="language" style="width: 100%;">
-                            <option value="" disabled selected>Select your option</option>
+                            <option value="" disabled selected>Select language</option>
                             {% for l in languages %}
-                                <option>
-                                    {{ l }}
+                                <option value={{l}}>
+                                    {{ l.capitalize() }}
                                 </option>
                             {% endfor %}
                             </select>
                         </div>
                     </div>
 
-                    <div class="" style="width: 100%; height: 50%">
+                    <div class="" style="width: 100%; height: 50%;">
                         <div style="margin: 2% 0 0 0;">
                             <strong class="text-left">
                                 Question
@@ -60,8 +60,8 @@
                         </div>
                     </div>
 
-                    <div style="margin-top: 3%; height: 25%;">
-                        <div class="">
+                    <div style="padding-top: 6%; height: 25%;">
+                        <div>
                             <strong class="text-left">
                                 Hint
                             </strong>
@@ -72,7 +72,7 @@
                     </div>
                 </div>
 
-                <div class="padding-5" style="float: right; width:50%; height: 100%;">
+                <div class="padding-5" style="float: right; width:55%; height: 100%; margin-right: 2%;">
                     <div class="box-name">
                         <strong class="text-left">
                             Answer
@@ -84,9 +84,9 @@
                 </div>
             </div>
 
-            <input type="hidden" name="answer" value="get_code();">
+            <input id="qs-answer" type="hidden" name="answer" value="">
             <div class="row">
-                <button class="btn btn-lg btn-primary" type="submit" value="Submit" style="width: 50%; height: 8%; margin: 4% 0 0 25%">Submit</button>
+                <button onclick="set_answer();" class="btn btn-lg btn-primary" type="submit" value="Submit" style="width: 50%; height: 8%; margin: 4% 0 0 25%">Submit</button>
             </div>
         </form>
     </div>
@@ -98,14 +98,20 @@
 
         var set_lang = function() {
             var select = document.getElementById("language");
-            var lang = select.options[select.selectedIndex].text;
-            console.log(lang)
+            var lang = select.options[select.selectedIndex].text.toLowerCase();
             editor.getSession().setMode("ace/mode/" + lang);
         }
       
 
         var get_code = function(){
-            var val = editor.getValue();
+            return editor.getValue();
+        }
+
+        var set_answer = function(){
+            $("#qs-answer").val(get_code());
+            console.log( $("#qs-answer").val());
+            console.log( get_code() );
+            document.getElementById("qs-answer").setAttribute('value',get_code());
         }
 
         window.onresize = editor.resize();

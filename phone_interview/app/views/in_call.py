@@ -96,6 +96,16 @@ def hint():
         answer_language=question.language
     )
 
+@app.route('/hangup', methods=['GET', 'POST'])
+def hangup():
+    sid = request.args.get('call_sid', '')
+    call = client.calls.update(sid, status="completed")
+    return render_template(
+        'homepage.html',
+        topics=db.session.query(Topic).all(),
+        is_current=False
+    )
+
 def pick_question(topic_id):
     if topic_id == "0":
         matches = db.session.query(Question).order_by(Question.popularity.desc())

@@ -22,8 +22,12 @@ def handle_recording():
     new_recording = Recording(
         url=request.form['RecordingUrl'],
         call_sid=request.form['CallSid'],
-        recording_sid=request.form['RecordingSid']
+        recording_sid=request.form['RecordingSid'],
     )
     db.session.add(new_recording)
     db.session.commit()
-    return "recording done"
+    return render_template(
+        'homepage.html',
+        topics=db.session.query(Topic).all(),
+        is_current=False
+    )

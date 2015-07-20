@@ -28,11 +28,14 @@ def new():
 @app.route('/make', methods=['POST'])
 def make():
     # add validations, probably through a form class
+    print request.form
     text=request.form['question']
     hint=request.form['hint']
     topic_id=request.form['topic_id']
     answer=request.form['answer']
     language=request.form['language']
+    print "in make:"
+    print language
     new_question = Question(
         text=text,
         hint=hint,
@@ -42,6 +45,7 @@ def make():
     )
     db.session.add(new_question)
     db.session.commit()
+    print new_question.language
     flash('Question created')
 
     return render_template(
