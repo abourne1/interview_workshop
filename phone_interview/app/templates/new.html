@@ -3,24 +3,24 @@
 
 {% block content %}
 
-<!-- javascript funciton that on submit, takes the text from the code editor ans submits is as the answer -->    
-
     <div class="jumbotron">
         <h1 class="text-center">Add A Question</h1>
     </div>
 
-    <div class="container-fluid">
-        <div class="row">
-            <div class="margin-15">
-                <form action="/make" method="post" class="form-inline text-center">
-                    <div class="form-box">
-                        <div class="box-name">
+    <div class="">
+        <form action="/make" method="post" class="form-inline">
+
+            <div class="row" style="height:75%;">
+
+                <div class="padding-5" style="float: left; width: 50%; height: 100%;">
+                    <div class="inline">
+                        <div class="">
                             <strong class="text-left">
                                 Topic
                             </strong>
                         </div>
-                        <div style="display: block;">
-                            <select id="new-box" class="form-control" name="topic_id">
+                        <div>
+                            <select class="form-control" name="topic_id" style="width: 100%;">
                             <option value="" disabled selected>Select your option</option>
                             {% for topic in topics %}
                                 <option value={{topic.id}}>
@@ -29,15 +29,16 @@
                             {% endfor %}
                             </select>
                         </div>
+                    </div>
 
-
-                        <div class="box-name" style="margin-top: 2%;">
+                    <div class="width-100 inline-block">
+                        <div style="margin: 1% 0 0 0;">
                             <strong class="text-left">
                                 Language
                             </strong>
                         </div>
-                        <div style="display: block;">
-                            <select onchange="set_lang();" id="language" class="form-control" name="language">
+                        <div>
+                            <select onchange="set_lang();" class="form-control" id="language" name="language" style="width: 100%;">
                             <option value="" disabled selected>Select your option</option>
                             {% for l in languages %}
                                 <option>
@@ -47,42 +48,47 @@
                             </select>
                         </div>
                     </div>
-                    <div class="form-box">
-                        <div class="box-name">
+
+                    <div class="" style="width: 100%; height: 50%">
+                        <div style="margin: 2% 0 0 0;">
                             <strong class="text-left">
                                 Question
                             </strong>
                         </div>
-                        <div style="display: block;">
-                            <textarea id="new-box" class="form-control" type="text" name="question" rows="5"></textarea>
+                        <div >
+                            <textarea class="form-control" type="text" name="question" rows="5" style="width: 100%; height: 100%;"></textarea>
                         </div>
                     </div>
-                    <div class="form-box">
-                        <div class="box-name">
+
+                    <div style="margin-top: 3%; height: 25%;">
+                        <div class="">
                             <strong class="text-left">
                                 Hint
                             </strong>
                         </div>
-                        <div style="display: block;">
-                            <textarea id="new-box" class="form-control" type="text" name="hint"></textarea>
+                        <div >
+                            <textarea class="form-control" type="text" name="hint" style="width: 100%; height: 100%"></textarea>
                         </div>
                     </div>
-                    <div>
-                        <div class="box-name">
-                            <strong class="text-left">
-                                Answer
-                            </strong>
-                        </div>
-                        <div id="editor-border" class="editor-border new-box">
-                            <div id="editor" class="editor text-left"></div>
-                        </div>
-                    </div>
-                    <input type="hidden" name="answer" value="get_code();">
-                    <button class="new-qs-btn btn btn-lg btn-primary" type="submit" value="Submit" style="width: 100%; margin">Submit</button>
-                </form>
+                </div>
 
+                <div class="padding-5" style="float: right; width:50%; height: 100%;">
+                    <div class="box-name">
+                        <strong class="text-left">
+                            Answer
+                        </strong>
+                    </div>
+                    <div id="editor-border" class="editor-border">
+                        <div id="editor" class="editor text-left"></div>
+                    </div>
+                </div>
             </div>
-        </div>
+
+            <input type="hidden" name="answer" value="get_code();">
+            <div class="row">
+                <button class="btn btn-lg btn-primary" type="submit" value="Submit" style="width: 50%; height: 8%; margin: 4% 0 0 25%">Submit</button>
+            </div>
+        </form>
     </div>
 
     <script>
@@ -99,8 +105,7 @@
       
 
         var get_code = function(){
-            var val= editor.getValue();
-            document.getElementById("test").innerHTML = val;
+            var val = editor.getValue();
         }
 
         window.onresize = editor.resize();

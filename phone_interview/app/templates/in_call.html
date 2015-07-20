@@ -1,56 +1,147 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <div class="jumbotron">
+
+    <p onload="set_lang({{language}});"></p>
+
+    <div class="jumbotron" style="margin-bottom: 2%;">
         <h1 class="text-center">Control Phone Call</h1>
     </div>
-    <div class="in-call">
-        <form style="display:inline;" class="in-call form-inline" action="/next-question">
-            <input type="hidden" name="call_sid" value={{call_sid}}>
-            <select id="next-call-select" name="topic_id" class="btn btn-default form-control">
-                <option value="" disabled selected>Next Question Topic</option>
-                <option value=0>Any</option>
-                {% for topic in topics %}
-                    <option value={{topic.id}}>{{ topic.name }}</option>
-                {% endfor %}
-            </select>
-            <input id="next-call-btn" class="btn in-call-btn btn-primary form-control" type="submit" value="Go To Next Question">
-        </form>
-    </div>
-    <div class="in-call">
-        <form style="display:inline;"class="in-call form-inline" action="/repeat">
-            <input type="hidden" name="call_sid" value={{call_sid}}>
-            <input type="hidden" name="question_id" value={{question_id}}>
-            <input type="hidden" name="voted" value={{voted}}>
-            <input id="in-call-btn" class="btn btn-default form-control" type="submit" value="Repeat">
-        </form>
-        <form style="display:inline;" class="in-call form-inline" action="/hint">
-            <input type="hidden" name="call_sid" value={{call_sid}}>
-            <input type="hidden" name="question_id" value={{question_id}}>
-            <input type="hidden" name="voted" value={{voted}}>
-            <input id="in-call-btn" class="btn in-call-btn btn-default form-control" type="submit" value="Hint">
-        </form>
-    </div>
-    <div class="in-call">
-        <form style="display:inline;" class="in-call form-inline" action="/answer">
-            <input type="hidden" name="call_sid" value={{call_sid}}>
-            <input type="hidden" name="question_id" value={{question_id}}>
-            <input type="hidden" name="voted" value={{voted}}>
-            <input id="in-call-btn" class="btn in-call-btn btn-default form-control" type="submit" value="Answer">
-        </form>
-        <form style="display:inline;" class="in-call form-inline" action="/hangup">
-            <input type="hidden" name="call_sid" value={{call_sid}}>
-            <input type="hidden" name="question_id" value={{question_id}}>
-            <input id="in-call-btn" class="btn in-call-btn btn-default form-control" type="submit" value="Hangup">
-        </form>
-    </div>
-    <div class="in-call">
-    {% if not voted %}
-        <form style="display:inline;" id="in-call-btn" class="in-call form-inline" action="/upvote">
-            <input type="hidden" name="call_sid" value={{call_sid}}>
-            <input type="hidden" name="question_id" value={{question_id}}>
-            <input id="in-call-btn" class="btn in-call-btn btn-default form-control" type="submit" value="Upvote">
-        </form>
-    {% endif %}
-    </div>
+
+<!-- start!!!!!! -->
+    <div class="row" style="height:75%;">
+
+                <div class="padding-5" style="float: left; width: 34%; height: 100%; margin: 5% 0 0 3%">
+                    <div class="in-call">
+                        <form style="display:inline;" class="in-call form-inline" action="/next-question">
+                            <input type="hidden" name="call_sid" value={{call_sid}}>
+                            <select id="next-call-select" name="topic_id" class="btn btn-default form-control">
+                                <option value="" disabled selected>Next Question Topic</option>
+                                <option value=0>Any</option>
+                                {% for topic in topics %}
+                                    <option value={{topic.id}}>{{ topic.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <input id="next-call-btn" class="btn in-call-btn btn-primary form-control" type="submit" value="Go To Next Question">
+                        </form>
+                    </div>
+                    <div class="in-call">
+                        <select onchange="set_lang();" class="form-control" id="language" style="width: 40%; margin: 0 0 5% 30%;">
+                            {% if language %}
+                                <option value="{{language}}" selected>{{language}}</option>
+                            {% else %}
+                                <option value="" disabled selected>Choose language</option>
+                            {% endif %}
+                            {% for l in languages %}
+                                <option>
+                                    {{ l }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="in-call">
+                        <form style="display:inline;"class="in-call form-inline" action="/repeat">
+                            <input type="hidden" name="call_sid" value={{call_sid}}>
+                            <input type="hidden" name="question_id" value={{question_id}}>
+                            <input type="hidden" name="voted" value={{voted}}>
+                            <input id="repeat-input" type="hidden" name="user_input" value="">
+                            <input id="repeat-language" type="hidden" name="language" value="">
+                            <input onclick="set_input_and_language('repeat');" id="in-call-btn" class="btn btn-default form-control" type="submit" value="Repeat">
+                        </form>
+
+                        <form style="display:inline;" class="in-call form-inline" action="/hint">
+                            <input type="hidden" name="call_sid" value={{call_sid}}>
+                            <input type="hidden" name="question_id" value={{question_id}}>
+                            <input type="hidden" name="voted" value={{voted}}>
+                            <input id="hint-input" type="hidden" name="user_input" value="">
+                            <input id="hint-language" type="hidden" name="language" value="">
+                            <input onclick="set_input_and_language('hint');" id="in-call-btn" class="btn in-call-btn btn-default form-control" type="submit" value="Hint">
+                        </form>
+                    </div>
+
+                    <div class="in-call">
+                        <div style="display:inline;" class="in-call-btn form-inline">
+                            <input id="show-answer" onclick="show_answer({{language}});" class="btn in-call-btn btn-default form-control" type="submit" value="Show Answer" style="width: 200px;height: 60px;margin: 0 2% 2% 2%;font-size: 140%;">
+                            <button id="hide-answer" style="display:none; width: 200px;height: 60px;margin: 0 2% 2% 2%;font-size: 140%;" onclick="hide_answer({{answer_language}});" class="btn form-control answer-btn btn-default">Hide Answer</button>
+                        </div>
+
+                        {% if not voted %}
+                            <form style="display:inline;" class="in-call-btn form-inline" action="/upvote">
+                                <input type="hidden" name="call_sid" value={{call_sid}}>
+                                <input type="hidden" name="question_id" value={{question_id}}>
+                                <input id="upvote-input" type="hidden" name="user_input" value="">
+                                <input id="upvote-language" type="hidden" name="language" value="">
+                                <input onclick="set_input_and_language('upvote');" id="in-call-btn" class="btn in-call-btn btn-default form-control" type="submit" value="Upvote">
+                            </form>
+                        {% else %}
+                            <form style="display:inline;" id="in-call-btn form-inline" class="in-call form-inline" action="/upvote">
+                                <input id="in-call-btn" class="btn in-call-btn btn-default form-control" type="submit" value="Upvote" disabled>
+                            </form>
+                        {% endif %}
+
+                    </div>
+                </div>
+
+                <div id="editor-user" style="float: right; width:58%; height: 90%; margin: 0 2% 0 0;">
+                    <div id="editor-border" class="editor-border">
+                        <div id="editor" class="editor text-left">{{user_input}}</div>
+                    </div>
+                </div>
+
+                <div id="editor-answer" style="display:none; float: right; width:58%; height: 90%; margin: 0 2% 0 0;">
+                    <div id="editor-border-answer" class="editor-border">
+                        <div id="editor2" class="editor text-left">{{answer}}</div>
+                    </div>
+                </div>
+            </div>
+    <script>
+    // set language to answer language if chosen...
+
+        var user_input;
+
+        var editor = ace.edit("editor");
+        editor.setTheme("ace/theme/clouds");
+
+        var editor2 = ace.edit("editor2");
+        editor2.setTheme("ace/theme/clouds");
+
+        // let the user choose language, and set it
+        var set_lang = function() {
+            editor.getSession().setMode("ace/mode/" + get_language());
+        }
+
+        var get_input = function() {
+            return editor.getValue();
+        }
+
+        var get_language = function() {
+            var select = document.getElementById("language");
+            var lang = select.options[select.selectedIndex].text;
+            return lang;
+        }
+
+        var show_answer = function(quesiton_lang) {
+            $("#editor-user").hide();
+            $("#editor-answer").show();
+            $("#show-answer").hide();
+            $("#hide-answer").show();
+            editor.getSession().setMode("ace/mode/" + question_lang)
+        }
+
+        var hide_answer = function(answer_lang) {
+            $("#editor-answer").hide();
+            $("#editor-user").show();
+            $("#hide-answer").hide();
+            $("#show-answer").show();
+            editor.getSession().setMode("ace/mode/" + answer_lang)
+        }
+
+        var set_input_and_language = function(id) {
+            $("#" + id + "-input").val(get_input());
+            $("#" + id + "-language").val(get_language());
+        }
+
+        window.onresize = editor.resize();
+    </script>
 {% endblock %}

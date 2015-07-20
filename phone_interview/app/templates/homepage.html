@@ -5,8 +5,9 @@
     <div class="jumbotron">
         <h1 class="text-center">Get a Phone Interview</h1>
     </div>
+
     <form class="main-form form-inline text-center" action="/choose_question">
-        <div class="row" style="">
+        <div class="row" style="margin: 5% 0 0 0; height: 10%;">
             <select name="topic_id" id="select-topic" class="form-control phone-input">
                     <option value="" disabled selected>Select a topic</option>
                     <option value=0>Any</option>
@@ -15,7 +16,7 @@
                     {% endfor %}
             </select>
             <div style="display:inline;">
-                <label class="checkbox-inline" style="margin: 0 0 4% 4%;">
+                <label class="checkbox-inline" style="margin: 0 0 4% 2%;">
                     <input type="checkbox" name="if_record"><span style="font-size:120%;">Record?</span></input>
                 </label>
             </div>

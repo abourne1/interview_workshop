@@ -56,6 +56,12 @@ class Recording(db.Model):
         self.recording_sid = recording_sid
         self.timestamp = datetime.datetime.now()
 
+    def question(self):
+        if self.question_id:
+            return db.session.query(Question).get(self.question_id)
+        else: 
+            return ""
+
     def prettify(self):
         return self.remove_zero(self.timestamp.strftime("%a, %d %b %Y %I:%M %p")) if self.timestamp else ""
 

@@ -2,32 +2,62 @@
 :-moz-placeholder {font-size: 120%; text-align: center;}
 :-ms-input-placeholder {font-size: 120%; text-align: center;}
 
+.padding-5 {
+	padding: 0 1% 0 2%;
+}
+
+.inline {
+	display: inline;
+}
+.width-100 {
+	width: 100%;
+}
+.width-40 {
+	width: 40%;
+}
+.margin-5 {
+	margin: 5%;
+}
+
+.answer-btn {
+	width: 55%;
+	height: 20%;
+}
+
+.recording-editor-border {
+	background-color: #ddd;
+    height: 100%;
+    border-radius:5px;
+    left: 50%;
+}
+
 .editor { 
     position: absolute;
     top: 13;
     right: 15;
     left: 15;
-    height: 92%;
-    width: 96%;
+    height: 95%;
+    width: 95%;
     font-size: 90%;
 }
 
 .editor-border{
 	background-color: #ddd;
-    position: relative;
-    height: 300px;
+    height: 100%;
     border-radius:5px;
+    left: 50%;
 }
 
 body {
 	background-color: #F0F7FF;
-	margin-bottom: 5%;
+	margin-bottom: 1%;
 	font-family: "Josefin Sans";
 }
 
 .jumbotron {
 	background-color: #F0F7FF;
-	padding: 40px 0;
+	padding: 10px 0 5px 0;
+	margin: 0 0 1% 0;
 }
 
 audio {
@@ -107,7 +137,7 @@ a:hover{
 }
 
 .phone-input {
-	width: 500px;
+	width: 550px;
 	height: 50px;
 	font-size: 130%;
 }
@@ -125,7 +155,7 @@ a:hover{
 	display: block;
 }
 
-#new-box, #language {
+#new-box {
 	border-color: #ccc;
 	border-radius: 5px;
 	width: 100%;
@@ -165,6 +195,7 @@ a:hover{
   #select-topic {
   	width: 90%;
   }
+
 }
 
 @media screen (max-width: 400px) {

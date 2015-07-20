@@ -10,7 +10,7 @@ from sqlalchemy import desc, func
 from app import app, db, mail, logger, client
 from twilio.util import TwilioCapability
 from new import new, make
-from in_call import next_question, upvote, repeat, hint, answer, hangup
+from in_call import next_question, upvote, repeat, hint, pick_question
 from recordings import handle_recording, recordings
 
 """
@@ -34,13 +34,15 @@ def homepage():
 def choose_question():
     topic_id = request.args.get('topic_id', '')
     phone_number = request.args.get('number', '')
-    question = choose_question(topic_id)
+    record = ("on" == request.args.get('if_record', ''))
+    logger.debug(record)
+    question = pick_question(topic_id)
     url = "{}/handle_call?question_id={}&action=speak".format(app.config['NGROK_ROUTE'], question.id)
     call = client.calls.create(
         to=phone_number,
         from_=app.config['TWILIO_NUMBER_1'],
         url=url,
-        record=True,
+        record=record,
         status_callback=app.config['NGROK_ROUTE'] + "/handle_recording",
         status_callback_method="POST"
     )
@@ -51,20 +53,10 @@ def choose_question():
         is_current=True,
         call_sid=call.sid,
         question_id=question.id,
+        languages=app.config["LANGUAGES"],
+        answer=question.answer,
+        answer_language=question.language
     )
-
-def choose_question(topic_id):
-    if topic_id == "0":
-        matches = db.session.query(Question).order_by(Question.popularity.desc())
-        index = int(random.random()**2 * matches.count() )
-        question = matches.all()[index]
-    else:
-        matches = db.session.query(Question).filter(
-            Question.topic_id == topic_id
-        ).order_by(Question.popularity.desc())
-        index = int(random.random()**2 * matches.count() )
-        question = matches.all()[index]
-    return question
 
 @app.route('/handle_call', methods=['GET', 'POST'])
 def handle_call():

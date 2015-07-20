@@ -7,9 +7,18 @@
     <div class="recordings text-center">
         <ul class="list-unstyled">
             {% for r in recordings %}
-                <li>
+                <li style="margin: 0 0 1% 0;">
                     <div class="row">
                         <small style="display: block; font-size: 120%;">{{r.prettify()}}</small>
+                    </div>
+
+                    <div class="row text-center" style="width: 70%; margin: 0 0 0 15%">
+                        <div style="margin: 0 10% 0 10%;">
+                        {% if r.question() %}
+                            <p class="form-control" style:"resize: none; border-radius: 10px; margin: 0 30% 0 30%">{{r.question().text}}</p>
+                        {% endif %}
+                    </div>
+
                         <audio controls>
                           <source src={{r.url}} type="audio/ogg">
                           <source src={{r.url}} type="audio/mpeg">

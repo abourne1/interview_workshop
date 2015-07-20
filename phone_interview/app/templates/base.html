@@ -10,17 +10,9 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
-
-  <script type="text/javascript" src="static/bower_components/recorderjs/recorder.js"></script>
-  <script type="text/javascript" src="static/js/record.js"></script>
+  <!-- ace highlighting plugin -->
   <script type="text/javascript" src="static/js/src/ace.js"></script>
   
-    {% if title %}
-    <title>{{ title }} - microblog</title>
-    {% else %}
-    <title>microblog</title>
-    {% endif %}
-
   <script>
   function remove() {
     var x = document.getElementById("flash");
@@ -28,13 +20,15 @@
   };
   </script>
 
+  <title>Phone Interview</title>
+
   </head>
 
   <body>
     <div class="top-bar navbar navbar-inverse navbar-top">
       <div id="collapse">
           <ul class="nav-links list-inline">
-            <li class="">
+            <li style="margin-left: 1%;">
               <a href = "/"><span class="glyphicon glyphicon-phone-alt"></span> + <span  class="glyphicon glyphicon-education"></span></a>
             </li>
             <li style="margin: 0 0 0 15px;">
