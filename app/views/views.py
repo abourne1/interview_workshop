@@ -24,6 +24,7 @@ def homepage():
 
 @app.route('/choose_question', methods=['GET', 'POST'])
 def choose_question():
+    print "In choose question"
     topic_id = request.args.get('topic_id', '')
     phone_number = request.args.get('number', '')
     print request.args

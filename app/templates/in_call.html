@@ -27,15 +27,17 @@
                     </div>
                     <div class="in-call">
                         <select onchange="set_lang();" class="form-control" id="language" style="width: 40%; margin: 0 0 5% 30%;">
-                            {% if language %}
-                                <option value="{{language}}" selected>{{language}}</option>
-                            {% else %}
+                            {% if not language %}
                                 <option value="" disabled selected>Choose language</option>
                             {% endif %}
                             {% for l in languages %}
-                                <option>
-                                    {{ l }}
-                                </option>
+                                {% if l != language %}
+                                    <option>
+                                        {{ l }}
+                                    </option>
+                                {% else %}
+                                    <option id="{{language}}" value="{{language}}" selected>{{language}}</option>
+                                {% endif %}
                             {% endfor %}
                         </select>
                     </div>
@@ -133,8 +135,7 @@
             $("#editor-answer").show();
             $("#show-answer").hide();
             $("#hide-answer").show();
-            console.log(question_lang)
-            editor2.getSession().setMode("ace/mode/" + question_lang)
+            editor2.getSession().setMode("ace/mode/" + question_lang);
         }
 
         var hide_answer = function(answer_lang) {
@@ -142,8 +143,7 @@
             $("#editor-user").show();
             $("#hide-answer").hide();
             $("#show-answer").show();
-            console.log(answer_lang)
-            editor.getSession().setMode("ace/mode/" + answer_lang)
+            editor.getSession().setMode("ace/mode/" + answer_lang);
         }
 
         var set_input_and_language = function(id) {
@@ -151,6 +151,7 @@
             $("#" + id + "-language").val(get_language());
         }
 
+        window.onload = set_lang()
         window.onresize = editor.resize();
     </script>
 {% endblock %}
